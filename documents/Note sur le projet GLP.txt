@@ -1,0 +1,38 @@
+Projet de manière générale :
+
+-Toujours projet en 2D (vue aérienne)
+-Interdit de prendre quoique ce soit sur internet
+-Pas de rendu graphique (pour le td1)
+
+Notre projet (Carte): 
+
+-Jeux pas trouvable
+-au moins 3 joueur (jusqu'à 5)
+-chaque joueur pioche 5 carte au début
+-on pose une carte puis le joueur suivant doit poser une carte qui suit (par exemple: 4 après le 3 pas autre chose)
+-2 est une carte spéciale qui écrase le jeu (sans bombe)
+-Il y a les bombes etc
+-piochez si on a pas carte
+-si t'as plus de carte, tu gagnes (argent si on mise)
+-54 cartes
+-A la fin de chaque tour, on pioche
+-on regarde pas les couleurs juste les chiffres
+-on choisis celui qui commence avec le symbole(carreaux,trèfles,coeur,pique) avec le chiffes le plus petit
+-on peut poser un simple, double (si 3 double poser il faut 4 double aussi)
+-triple c la bombe
+-pour une serie, il faut 3 carte qui se suivent
+-il faut toujours suivre avec le même nombre de carte
+-la seule façon d'écraser un 2 c une bombe (333)
+-la plus grosse bombe c JOKER JOKER
+-Le joker peut remplacer n'importe quel carte mais ne peut pas être poser seule
+-la bombe écrase le 2
+-1 carte = 1 jeton (argent), 1 bombe = 2x, 1 joker = 4x
+
+
+Ajout  perso sur le projets:
+-Différentes difficultés pour les bots
+
+Pour jeudi 12/02:
+
+-Faire une animation avec IHM Graphic
+

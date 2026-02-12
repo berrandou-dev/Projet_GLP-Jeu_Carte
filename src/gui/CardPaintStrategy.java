@@ -9,7 +9,7 @@ public class CardPaintStrategy {
     private static final int HEIGHT = 150;
 
     public void paint(Graphics g, String value, String suit, boolean lifted) {
-        int offset = lifted ? -20 : 0;
+        int offset = lifted ? 0 : 20;
 
         // Fond
         g.setColor(Color.WHITE);
@@ -17,7 +17,7 @@ public class CardPaintStrategy {
 
         // Bordure
         g.setColor(Color.BLACK);
-        g.drawRect(0, offset, WIDTH, HEIGHT);
+        g.drawRect(0, offset, WIDTH - 1, HEIGHT - 1);
 
         // Couleur selon le symbole
         if (suit.equals("♥") || suit.equals("♦")) {

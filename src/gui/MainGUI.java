@@ -1,33 +1,42 @@
 package gui;
 
-import java.awt.Dimension;
-
-
+import java.awt.*;
 import javax.swing.*;
 
 public class MainGUI extends JFrame {
 
-    private static final Dimension IDEAL_MAIN_DIMENSION = new Dimension(800, 400);
-
-    /**
-     * @param title
-     */
     public MainGUI(String title) {
         super(title);
 
-        setSize(IDEAL_MAIN_DIMENSION);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(800, 400);
         setLocationRelativeTo(null);
 
-        setLayout(null);
+        // Panel principal
+        JPanel mainPanel = new JPanel(new BorderLayout());
 
-        CardPanel card1 = new CardPanel("A", "♥");
-        CardPanel card2 = new CardPanel("K", "♠");
+        // Panel central pour la carte posée
+        JPanel centerPanel = new JPanel(null); // null layout pour placer la carte au centre
+        centerPanel.setPreferredSize(new Dimension(800, 200));
+        centerPanel.setBackground(new Color(0, 128, 0));
+        mainPanel.add(centerPanel, BorderLayout.CENTER);
 
-        card1.setBounds(300,210, 150, 200);
-        card2.setBounds(400, 210, 150, 200);
-        add(card1);
-        add(card2);
+        // Panel du bas pour les cartes du joueur
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        bottomPanel.setBackground(new Color(0, 128, 0));
+        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
+
+        // Création des cartes
+        String[] values = {"A","K","Q","J"};
+        String[] suits = {"♥","♠","♦","♣"};
+
+        for(int i=0;i<values.length;i++) {
+            CardPanel card = new CardPanel(values[i], suits[i], centerPanel);
+            bottomPanel.add(card);
+        }
+
+        // Ajouter le panel principal à la JFrame
+        add(mainPanel);
 
         setVisible(true);
     }
@@ -36,5 +45,4 @@ public class MainGUI extends JFrame {
         new MainGUI("Jeu Carte");
     }
 }
-
 

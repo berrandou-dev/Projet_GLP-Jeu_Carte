@@ -49,7 +49,32 @@ public class PiochePanel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+
+		int w = getWidth();
+		int h = getHeight();
+
+		// Fond bleu foncé
+		g.setColor(new Color(0, 80, 150));
+		g.fillRect(0, 0, w, h);
+
+		// Bordure blanche
 		g.setColor(Color.WHITE);
-		g.drawString("" + pioche.taille(), getWidth() / 2 - 5, getHeight() / 2);
+		g.drawRect(1, 1, w - 3, h - 3);
+
+		// Motif croisé simple (diagonales)
+		g.setColor(new Color(255, 255, 255, 60));
+		for (int i = -h; i < w + h; i += 20) {
+			g.drawLine(i, 0, i - h, h);
+			g.drawLine(i, 0, i + h, h);
+		}
+
+		// Nombre de cartes restantes
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("Arial", Font.BOLD, 18));
+		String nb = String.valueOf(pioche.taille());
+		FontMetrics fm = g.getFontMetrics();
+		int x = (w - fm.stringWidth(nb)) / 2;
+		int y = h / 2 + fm.getAscent() / 2;
+		g.drawString(nb, x, y);
 	}
 }

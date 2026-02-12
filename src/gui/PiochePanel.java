@@ -1,18 +1,17 @@
 package gui;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import engine.mobile.Pioche;
+
 public class PiochePanel extends JPanel {
 
 	private Pioche pioche;
-	private JLayeredPane centerPanel;
 	private JPanel bottomPanel;
 
 	public PiochePanel(Pioche pioche, JLayeredPane centerPanel, JPanel bottomPanel) {
 		this.pioche = pioche;
-		this.centerPanel = centerPanel;
 		this.bottomPanel = bottomPanel;
 
 		setPreferredSize(new Dimension(100, 150));

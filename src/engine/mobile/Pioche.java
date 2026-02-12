@@ -1,5 +1,5 @@
-package gui;
-
+package engine.mobile;
+import gui.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,10 +8,7 @@ import javax.swing.*;
 public class Pioche {
 
 	private List<CardPanel> cartes;
-	private JLayeredPane centerPanel;
-
 	public Pioche(JLayeredPane centerPanel) {
-		this.centerPanel = centerPanel;
 		cartes = new ArrayList<>();
 
 		String[] suits = { "♠", "♥", "♦", "♣" };

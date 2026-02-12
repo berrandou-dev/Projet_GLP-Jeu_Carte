@@ -1,5 +1,4 @@
 package gui;
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -10,13 +9,10 @@ public class CardPanel extends JPanel {
 	private String suit;
 	private boolean lifted = false;
 	private CardPaintStrategy painter = new CardPaintStrategy();
-	private JLayeredPane centerPanel;
-
+	
 	public CardPanel(String value, String suit, JLayeredPane centerPanel) {
 		this.value = value;
 		this.suit = suit;
-		this.centerPanel = centerPanel;
-
 		setPreferredSize(new Dimension(100, 170));
 		setOpaque(true);
 

@@ -42,7 +42,4 @@ public class MainGUI extends JFrame {
 		setVisible(true);
 	}
 
-	public static void main(String[] args) {
-		new MainGUI("Jeu Carte");
-	}
 }

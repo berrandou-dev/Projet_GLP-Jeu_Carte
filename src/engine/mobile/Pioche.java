@@ -1,51 +1,60 @@
 package engine.mobile;
-import gui.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.swing.*;
 
 public class Pioche {
 
-	private List<CardPanel> cartes;
-	public Pioche(JLayeredPane centerPanel) {
-		cartes = new ArrayList<>();
+    private List<Card> cards;
 
-		String[] suits = { "♠", "♥", "♦", "♣" };
-		String[] values = { "A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K" };
+    public Pioche() {
+        cards = new ArrayList<>();
 
-		for (String suit : suits) {
-			for (String value : values) {
-				cartes.add(new CardPanel(value, suit, centerPanel));
-			}
+        // 52 cartes normales
+        for (Card.Suit suit : new Card.Suit[]{
+                Card.Suit.HEARTS,
+                Card.Suit.SPADES,
+                Card.Suit.DIAMONDS,
+                Card.Suit.CLUBS
+        }) {
+            for (Card.Value value : new Card.Value[]{
+                    Card.Value.ACE, Card.Value.KING, Card.Value.QUEEN,
+                    Card.Value.JACK, Card.Value.TEN, Card.Value.NINE,
+                    Card.Value.EIGHT, Card.Value.SEVEN, Card.Value.SIX,
+                    Card.Value.FIVE, Card.Value.FOUR, Card.Value.THREE,
+                    Card.Value.TWO
+            }) {
+                cards.add(new Card(value, suit));
+            }
+        }
+
+        // Ajouter 2 jokers séparément
+        cards.add(new Card(Card.Value.JOKER, Card.Suit.JOKER));
+        cards.add(new Card(Card.Value.JOKER, Card.Suit.JOKER));
+
+        shuffle();
+    }
+
+    public void shuffle() {
+        Collections.shuffle(cards);
+    }
+
+    public Card draw() {
+        if (!cards.isEmpty()) return cards.remove(cards.size() - 1);
+        return null;
+    }
+
+    public int size() {
+		 return cards.size(); 
+		
 		}
 
-		cartes.add(new CardPanel("JOKER", "★", centerPanel));
-		cartes.add(new CardPanel("JOKER", "☆", centerPanel));
-
-		melanger();
+    public boolean isEmpty() { 
+		return cards.isEmpty(); 
 	}
 
-	public void melanger() {
-		Collections.shuffle(cartes);
-	}
-
-	public CardPanel piocher() {
-		if (!cartes.isEmpty()) {
-			return cartes.remove(cartes.size() - 1);
-		}
-		return null;
-	}
-
-	public int taille() {
-		return cartes.size();
-	}
-
-	public boolean estVide() {
-		return cartes.isEmpty();
-	}
-
-	public List<CardPanel> getCartes() {
-		return cartes;
+    public List<Card> getCards() { 
+		return cards; 
 	}
 }

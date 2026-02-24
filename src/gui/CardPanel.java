@@ -1,75 +1,103 @@
 package gui;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import engine.mobile.Card;
+
 public class CardPanel extends JPanel {
 
-	private String value;
-	private String suit;
-	private boolean lifted = false;
-	private CardPaintStrategy painter = new CardPaintStrategy();
-	
-	public CardPanel(String value, String suit, JLayeredPane centerPanel) {
-		this.value = value;
-		this.suit = suit;
-		setPreferredSize(new Dimension(100, 170));
-		setOpaque(true);
+    private Card card; // objet Card
+    private boolean lifted = false;
 
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				lifted = true;
-				repaint();
-			}
+    private CardPaintStrategy painter = new CardPaintStrategy();
 
-			@Override
-			public void mouseExited(MouseEvent e) {
-				lifted = false;
-				repaint();
-			}
+    public CardPanel(Card card, JLayeredPane centerPanel) {
 
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				lifted = false;
-				repaint();
+        this.card = card;
 
-				if (centerPanel != null) {
-					Container oldParent = CardPanel.this.getParent();
-					if (oldParent != null) {
-						oldParent.remove(CardPanel.this);
-						oldParent.revalidate();
-						oldParent.repaint();
-					}
+        setPreferredSize(new Dimension(100, 170));
+        setOpaque(true);
 
-					Dimension size = CardPanel.this.getPreferredSize();
-					int centerX = (centerPanel.getWidth() - size.width) / 2;
-					int centerY = (centerPanel.getHeight() - size.height) / 2;
-					CardPanel.this.setBounds(centerX, centerY, size.width, size.height);
+        addMouseListener(new MouseAdapter() {
 
-					centerPanel.add(CardPanel.this, JLayeredPane.PALETTE_LAYER);
-					centerPanel.moveToFront(CardPanel.this);
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                lifted = true;
+                repaint();
+            }
 
-					centerPanel.revalidate();
-					centerPanel.repaint();
-				}
-			}
-		});
-	}
+            @Override
+            public void mouseExited(MouseEvent e) {
+                lifted = false;
+                repaint();
+            }
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		painter.paint(g, value, suit, lifted);
-	}
+            @Override
+            public void mouseClicked(MouseEvent e) {
 
-	public void setValue(String value) {
-		this.value = value;
-		repaint();
-	}
+                lifted = false;
+                repaint();
 
-	public void setSuit(String suit) {
-		this.suit = suit;
-		repaint();
-	}
+                if (centerPanel != null) {
+
+                    Container oldParent = CardPanel.this.getParent();
+
+                    if (oldParent != null) {
+                        oldParent.remove(CardPanel.this);
+                        oldParent.revalidate();
+                        oldParent.repaint();
+                    }
+
+                    Dimension size = CardPanel.this.getPreferredSize();
+
+                    int centerX =
+                            (centerPanel.getWidth() - size.width) / 2;
+
+                    int centerY =
+                            (centerPanel.getHeight() - size.height) / 2;
+
+                    CardPanel.this.setBounds(
+                            centerX,
+                            centerY,
+                            size.width,
+                            size.height
+                    );
+
+                    centerPanel.add(
+                            CardPanel.this,
+                            JLayeredPane.PALETTE_LAYER
+                    );
+
+                    centerPanel.moveToFront(CardPanel.this);
+
+                    centerPanel.revalidate();
+                    centerPanel.repaint();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+
+        super.paintComponent(g);
+
+        painter.paint(
+                g,
+                card.getValue().getSymbol(),
+                card.getSuit().getSymbol(),
+                lifted
+        );
+    }
+
+    public Card getCard() {
+        return card;
+    }
+
+    public void setCard(Card card) {
+        this.card = card;
+        repaint();
+    }
 }

@@ -3,6 +3,7 @@ package gui;
 import java.awt.*;
 import javax.swing.*;
 import engine.mobile.Pioche;
+
 public class MainGUI extends JFrame {
 
     public MainGUI(String title) {
@@ -11,11 +12,9 @@ public class MainGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 400);
         setLocationRelativeTo(null);
-
        
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-       
         JLayeredPane centerPanel = new JLayeredPane();
         centerPanel.setPreferredSize(new Dimension(800, 200));
         centerPanel.setBackground(new Color(0, 128, 0));
@@ -38,7 +37,4 @@ public class MainGUI extends JFrame {
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        new MainGUI("Card Game");
-    }
 }

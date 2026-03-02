@@ -5,9 +5,9 @@ import java.awt.*;
 
 public class MenuGUI extends JFrame {
 
-    public MenuGUI() {
+	public MenuGUI() {
 
-        setTitle("MainGUI");
+	setTitle("MainGUI");
         setSize(900, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -32,8 +32,9 @@ public class MenuGUI extends JFrame {
          btnNewGame.setPreferredSize(new Dimension(250, 50));
          gbc.gridy = 1 ; 
         panel.add(btnNewGame, gbc);
+        
         btnNewGame.addActionListener(e -> {
-            new MainGUI(getTitle());
+            new OptionGUI();
             dispose();
         });
 

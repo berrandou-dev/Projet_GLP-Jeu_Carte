@@ -32,7 +32,8 @@ Notre projet (Carte):
 Ajout  perso sur le projets:
 -Différentes difficultés pour les bots
 
-Pour jeudi 12/02:
 
--Faire une animation avec IHM Graphic
+
+Attention:
+-Pas de diagramme de Grannt (EXTRATERRESTRE)
 

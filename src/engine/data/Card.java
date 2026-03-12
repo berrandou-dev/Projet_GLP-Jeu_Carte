@@ -1,4 +1,4 @@
-package data;
+package engine.mobile;
 
 public class Card {
 
@@ -30,11 +30,11 @@ public class Card {
     }
 
     public enum Suit {
-        HEARTS("♥"),
-        SPADES("♠"),
-        DIAMONDS("♦"),
-        CLUBS("♣"),
-        JOKER("★");
+        HEARTS("\u2665"),
+        SPADES("\u2660"),
+        DIAMONDS("\u2666"),
+        CLUBS("\u2663"),
+        JOKER("\u2605");
 
         private String symbol;
 

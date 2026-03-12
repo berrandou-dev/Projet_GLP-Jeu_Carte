@@ -1,14 +1,14 @@
-package engine.mobile;
+package data;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Pioche {
+public class Deck {
 
     private List<Card> cards;
 
-    public Pioche() {
+    public Deck() {
         cards = new ArrayList<>();
 
         // 52 cartes normales

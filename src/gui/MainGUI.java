@@ -2,7 +2,8 @@ package gui;
 
 import java.awt.*;
 import javax.swing.*;
-import engine.mobile.Pioche;
+
+import data.*;
 
 public class MainGUI extends JFrame {
 
@@ -26,12 +27,24 @@ public class MainGUI extends JFrame {
         bottomPanel.setBackground(new Color(0, 128, 0));
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
+        //Création de la pioche
+        Deck tabledeck = new Deck();
         
-        Pioche pioche = new Pioche();
-
-        PiochePanel piochePanel = new PiochePanel(pioche, centerPanel, bottomPanel);
-        piochePanel.setBounds(20, 20, 100, 150);
-        centerPanel.add(piochePanel, JLayeredPane.DEFAULT_LAYER);
+        // Création d’un joueur
+        Player player = new Player("Laiza");
+	
+	//DeckPanel
+        DeckPanel deckPanel = new DeckPanel(tabledeck, centerPanel, bottomPanel);
+        deckPanel.setBounds(20, 20, 100, 150);
+        centerPanel.add(deckPanel, JLayeredPane.DEFAULT_LAYER);
+        
+        // Ajout d’un MouseListener pour piocher pour ce joueur
+        deckPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                deckPanel.drawCard(player); // la carte va dans la main et s'affiche
+            }
+        });
 
         add(mainPanel);
         setVisible(true);

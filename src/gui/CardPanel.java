@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import engine.mobile.Card;
+import data.*;
 
 public class CardPanel extends JPanel {
 

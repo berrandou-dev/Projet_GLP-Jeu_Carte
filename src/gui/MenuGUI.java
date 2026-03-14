@@ -17,7 +17,7 @@ public class MenuGUI extends JFrame {
         panel.setLayout(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0; //l’index de la ligne
+        gbc.gridx = 0;
         gbc.insets = new Insets(15, 0, 15, 0);
 
         //Titre

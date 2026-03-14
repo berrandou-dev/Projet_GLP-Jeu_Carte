@@ -1,4 +1,6 @@
-package engine.mobile;
+package data;
+
+import java.util.Objects;
 
 public class Card {
 
@@ -61,5 +63,18 @@ public class Card {
 
     public Suit getSuit() {
         return suit;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null || getClass() != obj.getClass()) return false;
+        Card card = (Card) obj;
+        return value == card.value && suit == card.suit;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value, suit);
     }
 }

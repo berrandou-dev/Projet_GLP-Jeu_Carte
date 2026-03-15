@@ -10,12 +10,24 @@ public class Game {
     private Round currentRound;
     private int currentPlayerIndex;
     private Combination lastCombination;
+    private int playersPassed;
+    private Player humanPlayer;
+    private static final int PASS_LIMIT = 3;
     
     public Game(List<Player> players, Deck deck) {
         this.players = new ArrayList<>(players);
         this.deck = deck;
-        this.currentPlayerIndex = 0;
         this.lastCombination = null;
+        this.playersPassed = 0;
+        
+        for (Player p : players) {
+            if (p.getId().equals("Vous")) {
+                this.humanPlayer = p;
+                break;
+            }
+        }
+
+        this.currentPlayerIndex = players.indexOf(humanPlayer);
         
         initializeHands();
         this.currentRound = new Round(1, getCurrentPlayer(), deck);
@@ -35,10 +47,8 @@ public class Game {
         return players.get(currentPlayerIndex);
     }
     
-    public void nextTurn() {
+    private void nextTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
-        currentRound = new Round(currentRound.getRoundNumber() + 1, 
-                                 getCurrentPlayer(), deck);
         System.out.println("Nouveau tour: " + getCurrentPlayer().getId());
     }
     
@@ -52,6 +62,7 @@ public class Game {
         
         if (currentPlayer.playCombination(combination)) {
             lastCombination = combination;
+            playersPassed = 0;
             System.out.println(currentPlayer.getId() + " a joué: " + combination);
             
             if (!currentPlayer.hasCard()) {
@@ -59,6 +70,7 @@ public class Game {
                 return true;
             }
             
+            nextTurn();
             return true;
         }
         
@@ -67,7 +79,13 @@ public class Game {
     
     public void pass() {
         System.out.println(getCurrentPlayer().getId() + " passe son tour");
-        nextTurn();
+        playersPassed++;
+        
+        if (playersPassed >= players.size() - 1) {
+            endRound();
+        } else {
+            nextTurn();
+        }
     }
     
     public void drawCard() {
@@ -75,9 +93,32 @@ public class Game {
         if (!deck.isEmpty()) {
             currentPlayer.drawCard(deck);
             System.out.println(currentPlayer.getId() + " a pioché 1 carte");
+            nextTurn();
         } else {
             System.out.println("Le deck est vide !");
         }
+    }
+    
+    private void endRound() {
+        System.out.println("=== FIN DU ROUND " + currentRound.getRoundNumber() + " ===");
+        
+        for (Player player : players) {
+            if (!deck.isEmpty()) {
+                player.drawCard(deck);
+                System.out.println(player.getId() + " pioche 1 carte");
+            }
+        }
+        
+        lastCombination = null;
+        playersPassed = 0;
+        currentRound.endRound();
+        currentRound.nextRound();
+        
+
+        currentPlayerIndex = players.indexOf(humanPlayer);
+        
+        System.out.println("=== DÉBUT DU ROUND " + currentRound.getRoundNumber() + " ===");
+        System.out.println("C'est à " + getCurrentPlayer().getId() + " de jouer !");
     }
     
     public Deck getDeck() {

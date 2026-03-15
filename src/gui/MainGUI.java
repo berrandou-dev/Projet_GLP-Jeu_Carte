@@ -103,17 +103,27 @@ public class MainGUI extends JFrame {
 }
     
     public void refreshHand() {
-    bottomPanel.removeAll();
+	bottomPanel.removeAll();
     
-    for (Card card : humanPlayer.getHand()) {
-        CardPanel cardPanel = new CardPanel(card, layeredPane);
-        bottomPanel.add(cardPanel);
+	Player currentHumanPlayer = null;
+	for (Player p : game.getPlayers()) {
+		if (p.getId().equals("Vous")) {
+			currentHumanPlayer = p;
+			break;
+        	}
+	}
+    
+	if (currentHumanPlayer != null) {
+		for (Card card : currentHumanPlayer.getHand()) {
+			CardPanel cardPanel = new CardPanel(card, layeredPane);
+			bottomPanel.add(cardPanel);
+		}
+	}
+    
+	bottomPanel.revalidate();
+	bottomPanel.repaint();
+	CardPanel.clearSelection();
     }
-    
-    bottomPanel.revalidate();
-    bottomPanel.repaint();
-    CardPanel.clearSelection();
-}
     
     public void refreshDisplay() {
         gameDisplay.repaint();
@@ -121,7 +131,7 @@ public class MainGUI extends JFrame {
     }
     
 
-public void playSelectedCards() {
+    public void playSelectedCards() {
     List<CardPanel> selected = CardPanel.getSelectedPanels();
     
     if (selected.isEmpty()) {

@@ -65,6 +65,7 @@ public class GamePanel extends JPanel {
         updateDisplay();
         if (mainGUI != null) {
             mainGUI.refreshDisplay();
+            mainGUI.refreshHand();
         }
     }
     
@@ -73,6 +74,7 @@ public class GamePanel extends JPanel {
             game.drawCard();
             
             if (mainGUI != null) {
+                mainGUI.refreshHand();
                 mainGUI.refreshHand();
             }
             
@@ -91,9 +93,10 @@ public class GamePanel extends JPanel {
         }
         
 
-        boolean isHumanTurn = game.getCurrentPlayer().getId().equals("Vous");
+        /*boolean isHumanTurn = game.getCurrentPlayer().getId().equals("Vous");
         passButton.setEnabled(isHumanTurn);
         drawButton.setEnabled(isHumanTurn);
+        */
         
         repaint();
     }

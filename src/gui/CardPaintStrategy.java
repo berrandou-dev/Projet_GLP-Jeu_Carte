@@ -17,7 +17,7 @@ public class CardPaintStrategy {
 		g.setColor(Color.BLACK);
 		g.drawRect(0, offset, WIDTH - 1, HEIGHT - 1);
 
-		if (suit.equals("♥") || suit.equals("♦")) {
+		if (suit.equals("\u2665") || suit.equals("\u2666")) {
 			g.setColor(Color.RED);
 		} else {
 			g.setColor(Color.BLACK);

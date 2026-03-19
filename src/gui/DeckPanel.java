@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import data.*;
+import engine.data.*;
 
 public class DeckPanel extends JPanel {
 

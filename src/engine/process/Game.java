@@ -1,8 +1,8 @@
-package process;
+package engine.process;
 
 import java.util.ArrayList;
 import java.util.List;
-import data.*;
+import engine.data.*;
 
 public class Game {
     private List<Player> players;

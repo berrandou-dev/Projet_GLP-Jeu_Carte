@@ -1,10 +1,9 @@
-package process;
+package engine.process;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
-import data.Card;
-import data.CombinationType;
+import engine.data.*;
 
 public class Combination {
 

@@ -1,6 +1,6 @@
-package process;
+package engine.process;
 
-import data.*;
+import engine.data.*;
 
 public class Round {
     private int roundNumber;
@@ -11,7 +11,7 @@ public class Round {
     public Round(int roundNumber, Player player, Deck deck) {
         this.roundNumber = roundNumber;
         this.currentPlayer = player;
-        this.deck = deck;
+        this.setDeck(deck);
         this.roundComplete = false;
     }
 
@@ -35,4 +35,12 @@ public class Round {
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
+
+	public Deck getDeck() {
+		return deck;
+	}
+
+	public void setDeck(Deck deck) {
+		this.deck = deck;
+	}
 }

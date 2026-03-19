@@ -4,8 +4,8 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
-import data.*;
-import process.*;
+import engine.data.*;
+import engine.process.*;
 
 public class MainGUI extends JFrame {
     private Game game;

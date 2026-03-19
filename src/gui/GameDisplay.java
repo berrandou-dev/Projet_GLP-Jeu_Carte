@@ -2,9 +2,10 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import process.Game;
-import data.Player;
-import process.Combination;
+import engine.process.Game;
+import engine.data.*;
+import engine.process.Combination;
+
 
 public class GameDisplay extends JPanel {
     private Game game;

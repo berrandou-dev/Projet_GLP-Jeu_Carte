@@ -1,11 +1,11 @@
 package gui;
 
+import engine.data.*;
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
-import data.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
 
 public class CardPanel extends JPanel {
     private Card card;
@@ -85,7 +85,7 @@ public class CardPanel extends JPanel {
         String suit = card.getSuit().getSymbol();
         
         // Changer la couleur selon la couleur
-        if (suit.equals("♥") || suit.equals("♦")) {
+        if (suit.equals("\u2665") || suit.equals("\u2666")) {
             g.setColor(Color.RED);
         } else {
             g.setColor(Color.BLACK);

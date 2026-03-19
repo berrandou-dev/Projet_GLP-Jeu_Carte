@@ -1,16 +1,17 @@
-package data;
+package engine.data;
+
 
 import java.util.ArrayList;
 import java.util.List;
-import process.Combination;
+import engine.process.*;
 
 public class Player {
 
-    // Attributs
+    // Attributes
     private String id;
     private List<Card> hand;
     
-    // Constructeur
+    // Constructor
     public Player(String id){
         this.id = id;
         hand = new ArrayList<>();

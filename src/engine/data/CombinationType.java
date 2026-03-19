@@ -1,4 +1,4 @@
-package data;
+package engine.data;
 
 public enum CombinationType {
 	SIMPLE,

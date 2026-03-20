@@ -6,20 +6,23 @@ import java.util.List;
 import javax.swing.*;
 import engine.data.*;
 import engine.process.*;
+import config.GameConfig;
 
 public class MainGUI extends JFrame {
     private Game game;
-    private GameDisplay gameDisplay;
-    private GamePanel gamePanel;
+    private GameInfoBar gameInfoBar;
     private JPanel bottomPanel;
     private JLayeredPane layeredPane;
     private Player humanPlayer;
-    
+    private DeckPanel deckPanel;
+    private JPanel pilePanel;
+    private Card lastPlayedCard;
+
     public MainGUI(String title, int nbJoueurs, String difficulte) {
         super(title);
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600);
+        setSize(GameConfig.WINDOW_WIDTH, GameConfig.WINDOW_HEIGHT);
         setLocationRelativeTo(null);
         
         initGame(nbJoueurs, difficulte);
@@ -29,140 +32,153 @@ public class MainGUI extends JFrame {
     }
     
     private void initGame(int nbJoueurs, String difficulte) {
-        Deck deck = new Deck();
-        
-        List<Player> players = new ArrayList<>();
-        for (int i = 1; i <= nbJoueurs; i++) {
-            if (i == 1) {
-                humanPlayer = new Player("Vous");
-                players.add(humanPlayer);
-            } else {
-                players.add(new Player("Robot " + (i-1)));
-            }
-        }
-        
-        game = new Game(players, deck);
+        game = GameBuilder.buildGame(nbJoueurs, difficulte);
+        humanPlayer = GameBuilder.getHumanPlayer(game);
     }
     
     private void setupUI() {
-    JPanel mainPanel = new JPanel(new BorderLayout());
-    
-    // Panneau de jeu
-    gameDisplay = new GameDisplay(game);
-    gameDisplay.setPreferredSize(new Dimension(800, 400));
-    gameDisplay.setBackground(new Color(25, 100, 25));
-    mainPanel.add(gameDisplay, BorderLayout.CENTER);
-    
-    // Panneau d'information (en haut)
-    gamePanel = new GamePanel(game, this);
-    mainPanel.add(gamePanel, BorderLayout.NORTH);
-    
-    // Panneau de la main du joueur + bouton jouer (en bas)
-    bottomPanel = new JPanel(new FlowLayout());
-    bottomPanel.setBackground(new Color(0, 128, 0));
-    bottomPanel.setPreferredSize(new Dimension(800, 170));
-    
-    JPanel southPanel = new JPanel(new BorderLayout());
-    
-    JPanel redLinePanel = new JPanel();
-    redLinePanel.setPreferredSize(new Dimension(800, 3));
-    redLinePanel.setBackground(Color.RED);
-    southPanel.add(redLinePanel, BorderLayout.NORTH);
-    
-    southPanel.add(bottomPanel, BorderLayout.CENTER);
-    
-    JButton playSelectedButton = new JButton("JOUER LES CARTES SÉLECTIONNÉES");
-    playSelectedButton.setFont(new Font("Arial", Font.BOLD, 16));
-    playSelectedButton.setBackground(new Color(255, 215, 0));
-    playSelectedButton.setForeground(Color.BLACK);
-    playSelectedButton.addActionListener(e -> playSelectedCards());
-    
-    JPanel buttonPanel = new JPanel();
-    buttonPanel.setBackground(new Color(0, 128, 0));
-    buttonPanel.add(playSelectedButton);
-    southPanel.add(buttonPanel, BorderLayout.SOUTH);
-    
-    mainPanel.add(southPanel, BorderLayout.SOUTH);
-    
-    // Layered pane pour la pioche
-    layeredPane = new JLayeredPane();
-    layeredPane.setPreferredSize(new Dimension(800, 200));
-    layeredPane.setBackground(new Color(30, 120, 30));
-    layeredPane.setOpaque(true);
-    
-    DeckPanel deckPanel = new DeckPanel(game.getDeck(), layeredPane, bottomPanel);
-    deckPanel.setBounds(20, 20, 100, 150);
-    layeredPane.add(deckPanel, JLayeredPane.DEFAULT_LAYER);
-    
-    mainPanel.add(layeredPane, BorderLayout.CENTER);
-    
-    add(mainPanel);
-    
-    // Afficher les cartes initiales
-    refreshHand();
-}
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        
+        // Barre d'information (en haut)
+        gameInfoBar = new GameInfoBar(game, this);
+        mainPanel.add(gameInfoBar, BorderLayout.NORTH);
+        
+        // Panneau de la main du joueur + bouton jouer (en bas)
+        bottomPanel = new JPanel(new FlowLayout());
+        bottomPanel.setBackground(new Color(0, 128, 0));
+        bottomPanel.setPreferredSize(new Dimension(GameConfig.WINDOW_WIDTH, 170));
+        
+        JPanel southPanel = new JPanel(new BorderLayout());
+        
+        JPanel redLinePanel = new JPanel();
+        redLinePanel.setPreferredSize(new Dimension(GameConfig.WINDOW_WIDTH, 3));
+        redLinePanel.setBackground(Color.RED);
+        southPanel.add(redLinePanel, BorderLayout.NORTH);
+        
+        southPanel.add(bottomPanel, BorderLayout.CENTER);
+        
+        JButton playSelectedButton = new JButton("JOUER LES CARTES SÉLECTIONNÉES");
+        playSelectedButton.setFont(new Font(GameConfig.FONT_NAME, Font.BOLD, GameConfig.FONT_LARGE));
+        playSelectedButton.setBackground(new Color(255, 215, 0));
+        playSelectedButton.setForeground(Color.BLACK);
+        playSelectedButton.addActionListener(e -> playSelectedCards());
+        
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(new Color(0, 128, 0));
+        buttonPanel.add(playSelectedButton);
+        southPanel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        mainPanel.add(southPanel, BorderLayout.SOUTH);
+        
+        // Layered pane pour la pioche et le tas (au centre)
+        layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(GameConfig.WINDOW_WIDTH, 200));
+        layeredPane.setBackground(GameConfig.TABLE_COLOR);
+        layeredPane.setOpaque(true);
+        
+        // Pioche (à gauche)
+        deckPanel = new DeckPanel(game.getDeck(), layeredPane, bottomPanel);
+        deckPanel.setBounds(20, 20, GameConfig.CARD_WIDTH, GameConfig.CARD_HEIGHT);
+        layeredPane.add(deckPanel, JLayeredPane.DEFAULT_LAYER);
+        
+        // Tas des cartes jouées (au centre)
+        pilePanel = new JPanel();
+        pilePanel.setBounds(350, 20, GameConfig.CARD_WIDTH, GameConfig.CARD_HEIGHT);
+        pilePanel.setBackground(new Color(0, 100, 0));
+        pilePanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        pilePanel.setLayout(new BorderLayout());
+        layeredPane.add(pilePanel, JLayeredPane.DEFAULT_LAYER);
+        
+        mainPanel.add(layeredPane, BorderLayout.CENTER);
+        
+        add(mainPanel);
+        
+        refreshHand();
+    }
     
     public void refreshHand() {
-	bottomPanel.removeAll();
+        bottomPanel.removeAll();
+        
+        if (humanPlayer != null) {
+            for (Card card : humanPlayer.getHand()) {
+                CardPanel cardPanel = new CardPanel(card, layeredPane);
+                bottomPanel.add(cardPanel);
+            }
+        }
+        
+        bottomPanel.revalidate();
+        bottomPanel.repaint();
+        CardPanel.clearSelection();
+        
+        if (deckPanel != null) {
+            deckPanel.refreshCount();
+        }
+        
+        updatePilePanel();
+    }
     
-	Player currentHumanPlayer = null;
-	for (Player p : game.getPlayers()) {
-		if (p.getId().equals("Vous")) {
-			currentHumanPlayer = p;
-			break;
-        	}
-	}
-    
-	if (currentHumanPlayer != null) {
-		for (Card card : currentHumanPlayer.getHand()) {
-			CardPanel cardPanel = new CardPanel(card, layeredPane);
-			bottomPanel.add(cardPanel);
-		}
-	}
-    
-	bottomPanel.revalidate();
-	bottomPanel.repaint();
-	CardPanel.clearSelection();
+    private void updatePilePanel() {
+        pilePanel.removeAll();
+        
+        if (lastPlayedCard != null) {
+            CardPanel cardPanel = new CardPanel(lastPlayedCard, layeredPane);
+            cardPanel.setEnabled(false);
+            for (java.awt.event.MouseListener ml : cardPanel.getMouseListeners()) {
+                cardPanel.removeMouseListener(ml);
+            }
+            pilePanel.add(cardPanel, BorderLayout.CENTER);
+        } else {
+            JLabel emptyLabel = new JLabel("Tas vide");
+            emptyLabel.setForeground(Color.WHITE);
+            emptyLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            pilePanel.add(emptyLabel, BorderLayout.CENTER);
+        }
+        
+        pilePanel.revalidate();
+        pilePanel.repaint();
     }
     
     public void refreshDisplay() {
-        gameDisplay.repaint();
-        gamePanel.updateDisplay();
+        gameInfoBar.updateDisplay();
+        
+        if (deckPanel != null) {
+            deckPanel.refreshCount();
+        }
+        
+        updatePilePanel();
     }
-    
 
     public void playSelectedCards() {
-    List<CardPanel> selected = CardPanel.getSelectedPanels();
-    
-    if (selected.isEmpty()) {
-        JOptionPane.showMessageDialog(this, 
-            "Sélectionnez d'abord des cartes à jouer !", 
-            "Attention", 
-            JOptionPane.WARNING_MESSAGE);
-        return;
+        List<CardPanel> selected = CardPanel.getSelectedPanels();
+        
+        if (selected.isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "Sélectionnez d'abord des cartes à jouer !", 
+                "Attention", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        List<Card> cardsToPlay = new ArrayList<>();
+        for (CardPanel panel : selected) {
+            cardsToPlay.add(panel.getCard());
+        }
+        
+        CombinationType type = Combination.determineType(cardsToPlay);
+        Combination combination = new Combination(cardsToPlay, type);
+        
+        if (game.playCombination(combination)) {
+            lastPlayedCard = cardsToPlay.get(cardsToPlay.size() - 1);
+            
+            refreshHand();
+            refreshDisplay();
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                "Cette combinaison n'est pas valide !", 
+                "Erreur", 
+                JOptionPane.ERROR_MESSAGE);
+        }
     }
-    
-    // Récupérer les cartes des panneaux sélectionnés
-    List<Card> cardsToPlay = new ArrayList<>();
-    for (CardPanel panel : selected) {
-        cardsToPlay.add(panel.getCard());
-    }
-    
-    // Créer et jouer la combinaison
-    CombinationType type = Combination.determineType(cardsToPlay);
-    Combination combination = new Combination(cardsToPlay, type);
-    
-    if (game.playCombination(combination)) {
-        // Rafraîchir l'affichage
-        refreshHand();
-        refreshDisplay();
-    } else {
-        JOptionPane.showMessageDialog(this, 
-            "Cette combinaison n'est pas valide !", 
-            "Erreur", 
-            JOptionPane.ERROR_MESSAGE);
-    }
-}
     
     public Game getGame() {
         return game;

@@ -12,10 +12,11 @@ public class CardPanel extends JPanel {
     private boolean lifted = false;
     private boolean selected = false;
     private static List<CardPanel> selectedPanels = new ArrayList<>();
-
+    private CardPaintStrategy paintStrategy;
 
     public CardPanel(Card card, JLayeredPane centerPanel) {
         this.card = card;
+        this.paintStrategy = new CardPaintStrategy();
 
         setPreferredSize(new Dimension(100, 170));
         setOpaque(true);
@@ -36,7 +37,6 @@ public class CardPanel extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Inverser la sélection
                 selected = !selected;
                 
                 if (selected) {
@@ -48,7 +48,6 @@ public class CardPanel extends JPanel {
                 }
                 
                 repaint();
-                
             }
         });
     }
@@ -57,52 +56,29 @@ public class CardPanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-        // Fond blanc pour la carte
-        g.setColor(Color.WHITE);
-        g.fillRect(0, 0, getWidth(), getHeight());
+        // Sauvegarder le contexte graphique
+        Graphics2D g2d = (Graphics2D) g.create();
         
-        // Si survolée
+        
         if (lifted) {
-            g.setColor(new Color(255, 255, 255, 200));
-            g.fillRect(0, 0, getWidth(), getHeight());
+            g2d.translate(0, -10);
         }
         
-        // Si sélectionnée
-        if (selected) {
-            g.setColor(new Color(255, 255, 0, 100));
-            g.fillRect(0, 0, getWidth(), getHeight());
-            g.setColor(Color.YELLOW);
-            g.drawRect(2, 2, getWidth()-5, getHeight()-5);
-            g.drawRect(3, 3, getWidth()-7, getHeight()-7);
-        }
         
-        // Dessiner la carte
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        
-        // Valeur et couleur
         String value = card.getValue().getSymbol();
         String suit = card.getSuit().getSymbol();
+        paintStrategy.paint(g2d, value, suit, lifted);
         
-        // Changer la couleur selon la couleur
-        if (suit.equals("\u2665") || suit.equals("\u2666")) {
-            g.setColor(Color.RED);
-        } else {
-            g.setColor(Color.BLACK);
+        
+        if (selected) {
+            g2d.setColor(new Color(255, 255, 0, 100));
+            g2d.fillRect(0, 0, getWidth(), getHeight());
+            g2d.setColor(Color.YELLOW);
+            g2d.drawRect(2, 2, getWidth()-5, getHeight()-5);
+            g2d.drawRect(3, 3, getWidth()-7, getHeight()-7);
         }
         
-        // Dessiner en haut à gauche
-        g.setFont(new Font("Arial", Font.BOLD, 16));
-        g.drawString(value, 10, 25);
-        g.drawString(suit, 10, 45);
-        
-        // Dessiner en bas à droite (inversé)
-        g.drawString(value, getWidth() - 25, getHeight() - 15);
-        g.drawString(suit, getWidth() - 25, getHeight() - 35);
-        
-        // Bordure
-        g.setColor(Color.BLACK);
-        g.drawRect(0, 0, getWidth()-1, getHeight()-1);
+        g2d.dispose();
     }
 
     public Card getCard() {

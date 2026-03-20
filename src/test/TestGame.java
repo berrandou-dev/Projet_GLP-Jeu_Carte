@@ -1,10 +1,9 @@
 package test;
 
+import gui.MenuGUI;
 
-import gui.*;
-
-public class TestGame{
-	public static void main(String[] args) {
-		new MenuGUI();
-	}
+public class TestGame {
+    public static void main(String[] args) {
+        new MenuGUI();
+    }
 }

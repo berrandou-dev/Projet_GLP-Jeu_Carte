@@ -19,20 +19,19 @@ public class GameBuilder {
 
         // Robots selon la difficulté
         for (int i = 1; i < nbJoueurs; i++) {
-            players.add(creerRobot("Robot " + i, difficulte));
-        }
+        	players.add(createBot("Robot " + i, difficulte));
+		}
 
         return new Game(players, deck);
     }
 
-    private static Player creerRobot(String nom, String difficulte) {
-        if (difficulte == null) return new RobotMoyen(nom);
-        switch (difficulte.trim().toLowerCase()) {
-            case "facile":    return new RobotFacile(nom);
-            case "difficile": return new RobotDifficile(nom);
-            default:          return new RobotMoyen(nom);
-        }
-    }
+    private static BotPlayer createBot(String nom, String difficulte) {
+    	switch (difficulte.toLowerCase()) {
+        	case "facile": return new EasyBot(nom);
+        	case "difficile": return new HardBot(nom);
+        	default: return new MediumBot(nom);
+    	}
+	}
 
     public static Player getHumanPlayer(Game game) {
         for (Player p : game.getPlayers()) {

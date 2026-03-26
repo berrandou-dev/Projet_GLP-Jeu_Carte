@@ -57,9 +57,9 @@ public class MainGUI extends JFrame {
             if (game.isGameOver()) { showGameOver(); return; }
 
             Player current = game.getCurrentPlayer();
-            if (current instanceof Robot) {
-                Robot robot = (Robot) current;
-                Combination choix = robot.choisirCombinaison(current.getHand(), game.getLastCombination());
+			if (current instanceof BotPlayer) {
+				BotPlayer bot = (BotPlayer) current;
+    			Combination choix = bot.choisirCombinaison(current.getHand(), game.getLastCombination());
 
                 if (choix != null) {
                     game.playCombination(choix);

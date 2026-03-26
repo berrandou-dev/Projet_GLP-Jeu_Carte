@@ -53,26 +53,26 @@ public class MainGUI extends JFrame {
         gameInfoBar.updateDisplay();
 
         Timer timer = new Timer(900, e -> {
-            if (game.isGameOver()) { showGameOver(); return; }
+    		if (game.isGameOver()) { showGameOver(); return; }
 
-            Player current = game.getCurrentPlayer();
-			if (current instanceof BotPlayer) {
-				BotPlayer bot = (BotPlayer) current;
-    			Combination choix = bot.choisirCombinaison(current.getHand(), game.getLastCombination());
+    		Player current = game.getCurrentPlayer();
+    		if (current instanceof BotPlayer) {
+        		BotPlayer bot = (BotPlayer) current;
+        		Combination choix = bot.choisirCombinaison(current.getHand(), game.getLastCombination());
 
-                if (choix != null) {
-                    game.playCombination(choix);
-                    lastPlayedCard = choix.getCards().get(choix.getCards().size() - 1);
-                } else {
-                    game.pass();
-                }
-            }
+        		if (choix != null) {
+            		game.playCombination(choix);
+            		lastPlayedCard = choix.getCards().get(choix.getCards().size() - 1);
+        		}
+        		else {
+            		game.pass();
+        		}
+    		}
 
-            refreshDisplay();
+    		refreshDisplay();
 
-            // Continuer la chaîne de tours robots 
-            runRobotTurns();
-        });
+    		runRobotTurns();
+		});
         timer.setRepeats(false);
         timer.start();
     }

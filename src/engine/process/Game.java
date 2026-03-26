@@ -26,8 +26,17 @@ public class Game {
             }
         }
 
-        this.currentPlayerIndex = players.indexOf(humanPlayer);
+        // Deal cards
         initializeHands();
+        
+        // Determine first player (ignoring 2 and Jokers)
+        this.currentPlayerIndex = findStartingPlayerIndex();
+        
+        // Fallback if no player found
+        if (this.currentPlayerIndex == -1) {
+            this.currentPlayerIndex = players.indexOf(humanPlayer);
+        }
+        
         this.currentRound = new Round(1, getCurrentPlayer(), deck);
     }
 
@@ -98,6 +107,79 @@ public class Game {
             System.out.println("Deck vide !");
         }
     }
+    
+    
+    /**
+     * Finds the index of the player who starts the game
+     * Rule: smallest card (excluding 2 and Joker)
+     * Suit order: DIAMONDS < CLUBS < HEARTS < SPADES
+     */
+    private int findStartingPlayerIndex() {
+        Card smallestCard = null;
+        int startingIndex = -1;
+        
+        for (int i = 0; i < players.size(); i++) {
+            Player player = players.get(i);
+            
+            for (Card card : player.getHand()) {
+                // Ignore Jokers
+                if (card.getValue() == Card.Value.JOKER) {
+                    continue;
+                }
+                
+                // Ignore 2s (special card)
+                if (card.getValue() == Card.Value.TWO) {
+                    continue;
+                }
+                
+                if (smallestCard == null || isSmaller(card, smallestCard)) {
+                    smallestCard = card;
+                    startingIndex = i;
+                }
+            }
+        }
+        
+        if (startingIndex != -1 && smallestCard != null) {
+            System.out.println("🏆 First player: " + players.get(startingIndex).getId() 
+                               + " with " + smallestCard.getValue().getSymbol() 
+                               + " " + smallestCard.getSuit().getSymbol());
+        }
+        
+        return startingIndex;
+    }
+    
+    /**
+     * Compares two cards to determine which is smaller
+     * @return true if c1 is smaller than c2
+     */
+    private boolean isSmaller(Card c1, Card c2) {
+        // First compare value
+        int val1 = c1.getValue().ordinal();
+        int val2 = c2.getValue().ordinal();
+        
+        if (val1 != val2) {
+            return val1 < val2;
+        }
+        
+        // If values are equal, compare suit
+        return getSuitOrder(c1.getSuit()) < getSuitOrder(c2.getSuit());
+    }
+    
+    /**
+     * Returns the priority order of a suit
+     * DIAMONDS (0) < CLUBS (1) < HEARTS (2) < SPADES (3)
+     */
+    private int getSuitOrder(Card.Suit suit) {
+        switch (suit) {
+            case DIAMONDS: return 0;
+            case CLUBS:    return 1;
+            case HEARTS:   return 2;
+            case SPADES:   return 3;
+            default:       return 4;
+        }
+    }
+    
+    
 
     private void endRound() {
         System.out.println("=== FIN DU ROUND " + currentRound.getRoundNumber() + " ===");

@@ -43,7 +43,6 @@ public class Player {
             hand.remove(card);
         }
         
-        System.out.println(id + " a joué : " + c);
         return true;
     }
     

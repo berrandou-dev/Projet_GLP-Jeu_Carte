@@ -10,13 +10,11 @@ public class GameInfoBar extends JPanel {
     private JLabel roundLabel;
     private JLabel currentPlayerLabel;
     private JLabel lastCombinationLabel;
-    private JButton passButton;
     private JButton drawButton;
     private static final String DICE   = "\uD83C\uDFB2";
     private static final String PLAYER = "\uD83D\uDC64";
     private static final String CARD   = "\uD83C\uDCCF";
 
-    private final Color COLOR_PASS = new Color(180, 60, 60);
     private final Color COLOR_DRAW = new Color(60, 120, 180);
     private final Color COLOR_DISABLED = new Color(100, 100, 100);
 
@@ -40,29 +38,22 @@ public class GameInfoBar extends JPanel {
         infoPanel.add(currentPlayerLabel);
         infoPanel.add(lastCombinationLabel);
 
-        // Boutons
+        // Bouton PIOCHER uniquement
         JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         controlPanel.setBackground(new Color(40, 40, 60));
         controlPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 15));
 
-        passButton = makeButton("\u23ED PASSER", COLOR_PASS);
         drawButton = makeButton("\uD83C\uDCCF PIOCHER", COLOR_DRAW);
-
-        passButton.addActionListener(e -> mainGUI.onHumanPass());
         drawButton.addActionListener(e -> mainGUI.onHumanDraw());
 
-        controlPanel.add(passButton);
-        controlPanel.add(drawButton);
+        controlPanel.add(drawButton);  // Seulement le bouton pioche
 
         add(infoPanel, BorderLayout.CENTER);
         add(controlPanel, BorderLayout.EAST);
     }
 
-    /** Active ou désactive les boutons Passer/Piocher. */
     public void setControlsEnabled(boolean enabled) {
-        passButton.setEnabled(enabled);
         drawButton.setEnabled(enabled);
-        passButton.setBackground(enabled ? COLOR_PASS : COLOR_DISABLED);
         drawButton.setBackground(enabled ? COLOR_DRAW : COLOR_DISABLED);
     }
 
@@ -86,6 +77,7 @@ public class GameInfoBar extends JPanel {
             lastCombinationLabel.setText(CARD + " Aucune");
             lastCombinationLabel.setForeground(new Color(255, 200, 100));
         }
+        
 
         repaint();
     }

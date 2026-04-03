@@ -3,6 +3,7 @@ package engine.process;
 import java.util.ArrayList;
 import java.util.List;
 import engine.data.*;
+import engine.logger.GameLogger;
 
 public class Game {
     private List<Player> players;
@@ -10,14 +11,20 @@ public class Game {
     private Round currentRound;
     private int currentPlayerIndex;
     private Combination lastCombination;
-    private int playersPassed;
     private Player humanPlayer;
+    private List<Card> discardPile;
+    private List<Card> allPlayedCards;
+    private int turnsInRound;
+    private GameLogger logger;
 
     public Game(List<Player> players, Deck deck) {
         this.players = new ArrayList<>(players);
+        this.discardPile = new ArrayList<>();
+        this.allPlayedCards = new ArrayList<>();
         this.deck = deck;
         this.lastCombination = null;
-        this.playersPassed = 0;
+        this.turnsInRound = 0;
+        this.logger = GameLogger.getInstance();
 
         for (Player p : players) {
             if (p.getId().equals("Vous")) {
@@ -26,13 +33,9 @@ public class Game {
             }
         }
 
-        // Deal cards
         initializeHands();
-        
-        // Determine first player (ignoring 2 and Jokers)
         this.currentPlayerIndex = findStartingPlayerIndex();
         
-        // Fallback if no player found
         if (this.currentPlayerIndex == -1) {
             this.currentPlayerIndex = players.indexOf(humanPlayer);
         }
@@ -54,17 +57,18 @@ public class Game {
 
     private void nextTurn() {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        turnsInRound++;
+        
+        if (turnsInRound >= players.size()) {
+            endRound();
+        }
     }
 
-    /**
-     * Tente de jouer une combinaison pour le joueur courant.
-     * @return true si la combinaison a bien été jouée , false sinon.
-     */
     public boolean playCombination(Combination combination) {
         Player currentPlayer = getCurrentPlayer();
 
         if (!combination.canBeat(lastCombination)) {
-            System.out.println("Cette combinaison ne peut pas battre la précédente !");
+            logger.logError("Cette combinaison ne peut pas battre la precedente !");
             return false;
         }
 
@@ -72,48 +76,71 @@ public class Game {
             return false;
         }
 
-        // Succès
+        if (lastCombination != null) {
+            discardPile.addAll(lastCombination.getCards());
+        }
+        
+        allPlayedCards.addAll(combination.getCards());
+        
+        discardPile.clear();
+        if (allPlayedCards.size() > combination.getCards().size()) {
+            List<Card> temp = new ArrayList<>(allPlayedCards);
+            temp.removeAll(combination.getCards());
+            discardPile.addAll(temp);
+        }
+        
         lastCombination = combination;
-        playersPassed = 0;
-        System.out.println(currentPlayer.getId() + " a joué : " + combination);
+        logger.logPlay(currentPlayer.getId(), combination.toString());
 
         if (!currentPlayer.hasCard()) {
-            System.out.println(currentPlayer.getId() + " a gagné !");
-            return true; // partie terminée 
+            logger.logWin(currentPlayer.getId());
+            return true;
         }
 
         nextTurn();
+        
+        if (deck.isEmpty() && !discardPile.isEmpty()) {
+            reshuffleDiscardPile();
+        }
+        
         return true;
     }
 
-    public void pass() {
-        System.out.println(getCurrentPlayer().getId() + " passe.");
-        playersPassed++;
-
-        if (playersPassed >= players.size() - 1) {
-            endRound();
-        } else {
-            nextTurn();
+    private void reshuffleDiscardPile() {
+        logger.log("📦 Deck vide ! Recyclage de " + discardPile.size() + " cartes...");
+        
+        for (Card card : discardPile) {
+            deck.getCards().add(card);
         }
+        
+        allPlayedCards.clear();
+        if (lastCombination != null) {
+            allPlayedCards.addAll(lastCombination.getCards());
+        }
+        
+        discardPile.clear();
+        deck.shuffle();
+        
+        logger.log("✅ Nouveau deck avec " + deck.size() + " cartes !");
     }
 
     public void drawCard() {
         Player current = getCurrentPlayer();
-        if (!deck.isEmpty()) {
-            current.drawCard(deck);
-            System.out.println(current.getId() + " a pioché.");
-            nextTurn();
-        } else {
-            System.out.println("Deck vide !");
+        
+        if (deck.isEmpty()) {
+            if (discardPile.isEmpty()) {
+                logger.log("Deck vide et aucune carte a recycler !");
+                nextTurn();
+                return;
+            }
+            reshuffleDiscardPile();
         }
+        
+        current.drawCard(deck);
+        logger.logDraw(current.getId());
+        nextTurn();
     }
-    
-    
-    /**
-     * Finds the index of the player who starts the game
-     * Rule: smallest card (excluding 2 and Joker)
-     * Suit order: DIAMONDS < CLUBS < HEARTS < SPADES
-     */
+
     private int findStartingPlayerIndex() {
         Card smallestCard = null;
         int startingIndex = -1;
@@ -122,12 +149,10 @@ public class Game {
             Player player = players.get(i);
             
             for (Card card : player.getHand()) {
-                // Ignore Jokers
                 if (card.getValue() == Card.Value.JOKER) {
                     continue;
                 }
                 
-                // Ignore 2s (special card)
                 if (card.getValue() == Card.Value.TWO) {
                     continue;
                 }
@@ -140,20 +165,14 @@ public class Game {
         }
         
         if (startingIndex != -1 && smallestCard != null) {
-            System.out.println("🏆 First player: " + players.get(startingIndex).getId() 
-                               + " with " + smallestCard.getValue().getSymbol() 
-                               + " " + smallestCard.getSuit().getSymbol());
+            logger.logFirstPlayer(players.get(startingIndex).getId(),
+                smallestCard.getValue().getSymbol() + " " + smallestCard.getSuit().getSymbol());
         }
         
         return startingIndex;
     }
     
-    /**
-     * Compares two cards to determine which is smaller
-     * @return true if c1 is smaller than c2
-     */
     private boolean isSmaller(Card c1, Card c2) {
-        // First compare value
         int val1 = c1.getValue().ordinal();
         int val2 = c2.getValue().ordinal();
         
@@ -161,14 +180,9 @@ public class Game {
             return val1 < val2;
         }
         
-        // If values are equal, compare suit
         return getSuitOrder(c1.getSuit()) < getSuitOrder(c2.getSuit());
     }
     
-    /**
-     * Returns the priority order of a suit
-     * DIAMONDS (0) < CLUBS (1) < HEARTS (2) < SPADES (3)
-     */
     private int getSuitOrder(Card.Suit suit) {
         switch (suit) {
             case DIAMONDS: return 0;
@@ -179,19 +193,18 @@ public class Game {
         }
     }
     
-    
-
     private void endRound() {
-        System.out.println("=== FIN DU ROUND " + currentRound.getRoundNumber() + " ===");
+        logger.logRoundEnd(currentRound.getRoundNumber());
+        
         for (Player player : players) {
             if (!deck.isEmpty()) player.drawCard(deck);
         }
-        lastCombination = null;
-        playersPassed = 0;
+        
+        turnsInRound = 0;
         currentRound.endRound();
         currentRound.nextRound();
         currentPlayerIndex = players.indexOf(humanPlayer);
-        System.out.println("=== DÉBUT DU ROUND " + currentRound.getRoundNumber() + " ===");
+        logger.logRoundStart(currentRound.getRoundNumber());
     }
 
     public boolean isHumanTurn() {
@@ -212,8 +225,8 @@ public class Game {
         return null;
     }
 
-    public Deck getDeck()                  { return deck; }
-    public List<Player> getPlayers()       { return new ArrayList<>(players); }
-    public Round getCurrentRound()         { return currentRound; }
-    public Combination getLastCombination(){ return lastCombination; }
+    public Deck getDeck() { return deck; }
+    public List<Player> getPlayers() { return new ArrayList<>(players); }
+    public Round getCurrentRound() { return currentRound; }
+    public Combination getLastCombination() { return lastCombination; }
 }

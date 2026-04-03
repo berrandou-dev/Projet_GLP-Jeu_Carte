@@ -170,7 +170,17 @@ private static boolean estSerie(List<Card> normal, int jokers) {
 }
     
     @Override
-    public String toString() {
-        return type + " with " + cards.size() + " cards";
+	public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append(type).append(" [");
+    for (int i = 0; i < cards.size(); i++) {
+        Card c = cards.get(i);
+        sb.append(c.getValue().getSymbol()).append(c.getSuit().getSymbol());
+        if (i < cards.size() - 1) {
+            sb.append(" ");
+        }
     }
+    sb.append("]");
+    return sb.toString();
+}
 }

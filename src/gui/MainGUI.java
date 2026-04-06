@@ -6,10 +6,14 @@ import java.util.List;
 import javax.swing.*;
 import engine.data.*;
 import engine.process.*;
-import engine.logger.GameLogger;
 import config.GameConfig;
+import log.LoggerUtility;
+import org.apache.log4j.Logger;
 
 public class MainGUI extends JFrame {
+
+    private static final Logger logger = LoggerUtility.getLogger(MainGUI.class, "html");
+
     private Game game;
     private GameInfoBar gameInfoBar;
     private JPanel bottomPanel;
@@ -29,26 +33,14 @@ public class MainGUI extends JFrame {
         game = GameBuilder.buildGame(nbJoueurs, difficulte);
         humanPlayer = GameBuilder.getHumanPlayer(game);
 
+        logger.info("Interface graphique demarree : " + nbJoueurs + " joueurs, difficulte=" + difficulte);
+
         setupUI();
         setVisible(true);
 
-        Card firstCard = getFirstPlayerCard();
-        if (firstCard != null) {
-            GameLogger.getInstance().logFirstPlayer(game.getCurrentPlayer().getId(),
-                firstCard.getValue().getSymbol() + " " + firstCard.getSuit().getSymbol());
-        }
-
-        // Fermer le logger à la fermeture de la fenêtre
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent e) {
-                GameLogger.getInstance().close();
-            }
-        });
-
         runRobotTurns();
     }
-    
+
     private Card getFirstPlayerCard() {
         for (Card card : game.getCurrentPlayer().getHand()) {
             if (card.getValue() != Card.Value.JOKER && card.getValue() != Card.Value.TWO) {
@@ -60,7 +52,7 @@ public class MainGUI extends JFrame {
 
     private void runRobotTurns() {
         if (game.isGameOver()) { showGameOver(); return; }
-        
+
         if (game.isHumanTurn()) {
             gameInfoBar.setControlsEnabled(true);
             gameInfoBar.updateDisplay();
@@ -82,8 +74,14 @@ public class MainGUI extends JFrame {
                 if (choix != null) {
                     game.playCombination(choix);
                     lastPlayedCard = choix.getCards().get(choix.getCards().size() - 1);
+                    String msg = current.getId() + " joue : " + choix.toString();
+                    logPanel.addLog(msg);
+                    logger.info("[BOT] " + msg);
                 } else {
                     game.drawCard();
+                    String msg = current.getId() + " pioche.";
+                    logPanel.addLog(msg);
+                    logger.info("[BOT] " + msg);
                 }
             }
 
@@ -99,8 +97,9 @@ public class MainGUI extends JFrame {
 
         if (selected.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                "Sélectionnez d'abord des cartes à jouer !",
+                "Selectionnez d'abord des cartes a jouer !",
                 "Attention", JOptionPane.WARNING_MESSAGE);
+            logger.warn("Le joueur humain a tente de jouer sans selectionner de cartes.");
             return;
         }
 
@@ -113,19 +112,26 @@ public class MainGUI extends JFrame {
         boolean ok = game.playCombination(combination);
         if (ok) {
             lastPlayedCard = cardsToPlay.get(cardsToPlay.size() - 1);
+            String msg = "Vous jouez : " + combination.toString();
+            logPanel.addLog(msg);
+            logger.info("[HUMAIN] " + msg);
             refreshHand();
             refreshDisplay();
             if (game.isGameOver()) { showGameOver(); return; }
             runRobotTurns();
         } else {
             JOptionPane.showMessageDialog(this,
-                "Combinaison invalide ou ne bat pas la précédente !",
+                "Combinaison invalide ou ne bat pas la precedente !",
                 "Erreur", JOptionPane.ERROR_MESSAGE);
+            logger.warn("[HUMAIN] Combinaison invalide jouee.");
         }
     }
 
     public void onHumanDraw() {
         game.drawCard();
+        String msg = "Vous piochez une carte.";
+        logPanel.addLog(msg);
+        logger.info("[HUMAIN] " + msg);
         refreshHand();
         refreshDisplay();
         if (game.isGameOver()) { showGameOver(); return; }
@@ -152,7 +158,7 @@ public class MainGUI extends JFrame {
 
     private void updatePilePanel() {
         pilePanel.removeAll();
-        
+
         Combination last = game.getLastCombination();
         if (last != null && !last.getCards().isEmpty()) {
             JPanel comboPanel = new JPanel(new FlowLayout());
@@ -168,16 +174,19 @@ public class MainGUI extends JFrame {
             lbl.setHorizontalAlignment(SwingConstants.CENTER);
             pilePanel.add(lbl, BorderLayout.CENTER);
         }
-        
+
         pilePanel.revalidate();
         pilePanel.repaint();
     }
 
     private void showGameOver() {
         Player winner = game.getWinner();
-        String msg = winner == null ? "Partie terminée !"
-                : winner.getId().equals("Vous") ? "🎉 Vous avez gagné !"
-                : winner.getId() + " a gagné !";
+        String msg = winner == null ? "Partie terminee !"
+                : winner.getId().equals("Vous") ? "Vous avez gagne !"
+                : winner.getId() + " a gagne !";
+
+        logger.info("=== FIN DE PARTIE : " + msg + " ===");
+        logPanel.addLog("=== " + msg + " ===");
 
         int choix = JOptionPane.showOptionDialog(this, msg, "Fin de partie",
                 JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null,
@@ -193,16 +202,16 @@ public class MainGUI extends JFrame {
 
     private void setupUI() {
         JPanel mainPanel = new JPanel(new BorderLayout());
-        
+
         gameInfoBar = new GameInfoBar(game, this);
         mainPanel.add(gameInfoBar, BorderLayout.NORTH);
-        
+
         bottomPanel = new JPanel(new FlowLayout());
         bottomPanel.setBackground(new Color(0, 128, 0));
         bottomPanel.setPreferredSize(new Dimension(GameConfig.WINDOW_WIDTH + 250, 170));
-        
+
         JPanel centerPanel = new JPanel(new BorderLayout());
-        
+
         layeredPane = new JLayeredPane();
         layeredPane.setPreferredSize(new Dimension(GameConfig.WINDOW_WIDTH, 200));
         layeredPane.setBackground(GameConfig.TABLE_COLOR);
@@ -217,12 +226,12 @@ public class MainGUI extends JFrame {
         pilePanel.setBackground(new Color(0, 100, 0));
         pilePanel.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
         layeredPane.add(pilePanel, JLayeredPane.DEFAULT_LAYER);
-        
+
         centerPanel.add(layeredPane, BorderLayout.CENTER);
-        
+
         logPanel = new GameLogPanel();
         centerPanel.add(logPanel, BorderLayout.EAST);
-        
+
         mainPanel.add(centerPanel, BorderLayout.CENTER);
 
         JPanel southPanel = new JPanel(new BorderLayout());
@@ -232,7 +241,7 @@ public class MainGUI extends JFrame {
         southPanel.add(redLine, BorderLayout.NORTH);
         southPanel.add(bottomPanel, BorderLayout.CENTER);
 
-        JButton playBtn = new JButton("JOUER LES CARTES SÉLECTIONNÉES");
+        JButton playBtn = new JButton("JOUER LES CARTES SELECTIONNEES");
         playBtn.setFont(new Font(GameConfig.FONT_NAME, Font.BOLD, GameConfig.FONT_LARGE));
         playBtn.setBackground(new Color(255, 215, 0));
         playBtn.setForeground(Color.BLACK);
@@ -247,6 +256,8 @@ public class MainGUI extends JFrame {
 
         add(mainPanel);
         refreshHand();
+
+        logger.info("Interface graphique initialisee.");
     }
 
     public Game getGame() { return game; }

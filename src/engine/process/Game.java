@@ -19,6 +19,8 @@ public class Game {
 	private List<Card> discardPile;
 	private List<Card> allPlayedCards;
 	private int turnsInRound;
+	private int passCount = 0;
+	private Player lastPlayerWhoPlayed = null;
 
 	public Game(List<Player> players, Deck deck) {
 		this.players = new ArrayList<>(players);
@@ -95,6 +97,8 @@ public class Game {
 		}
 
 		lastCombination = combination;
+		lastPlayerWhoPlayed = currentPlayer;
+		passCount = 0;
 		logger.info(currentPlayer.getId() + " a joue : " + combination.toString());
 
 		if (!currentPlayer.hasCard()) {
@@ -119,22 +123,42 @@ public class Game {
 
 	public void drawCard() {
 		Player current = getCurrentPlayer();
+
 		if (deck.isEmpty()) {
 			if (discardPile.isEmpty()) {
 				logger.warn("Deck vide et aucune carte a recycler !");
+				passCount++;
+				if (passCount >= players.size() - 1 && lastPlayerWhoPlayed != null) {
+					logger.info("=== TOUS LES JOUEURS ONT PASSE → NOUVEAU TOUR ===");
+					resetTurn();
+					return;
+				}
 				nextTurn();
 				return;
 			}
 			reshuffleDiscardPile();
 		}
+
 		current.drawCard(deck);
-		logger.info(current.getId() + " a pioche une carte. Cartes restantes : " + deck.size());
+		logger.info(current.getId() + " a passe (pioche). Cartes restantes : " + deck.size());
+
+		passCount++;
+
+		if (passCount >= players.size() - 1 && lastPlayerWhoPlayed != null) {
+			logger.info("=== TOUS LES JOUEURS ONT PASSE → NOUVEAU TOUR ===");
+			resetTurn();
+			return;
+		}
+
 		nextTurn();
 	}
 
-	public void pass() {
-		logger.info(getCurrentPlayer().getId() + " passe son tour.");
-		nextTurn();
+	private void resetTurn() {
+		logger.info("=== RESET DU TOUR ===");
+		lastCombination = null;
+		passCount = 0;
+		currentPlayerIndex = players.indexOf(lastPlayerWhoPlayed);
+		turnsInRound = 0;
 	}
 
 	private int findStartingPlayerIndex() {

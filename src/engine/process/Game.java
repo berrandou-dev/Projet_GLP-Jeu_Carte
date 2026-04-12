@@ -90,10 +90,9 @@ public class Game {
 		if (lastCombination != null) discardPile.addAll(lastCombination.getCards());
 		allPlayedCards.addAll(combination.getCards());
 		discardPile.clear();
-		if (allPlayedCards.size() > combination.getCards().size()) {
-			List<Card> temp = new ArrayList<>(allPlayedCards);
-			temp.removeAll(combination.getCards());
-			discardPile.addAll(temp);
+		int cardsToKeep = allPlayedCards.size() - combination.getCards().size();
+		for (int i = 0; i < cardsToKeep; i++) {   			
+			discardPile.add(allPlayedCards.get(i));
 		}
 
 		lastCombination = combination;
@@ -122,44 +121,64 @@ public class Game {
 	}
 
 	public void drawCard() {
-		Player current = getCurrentPlayer();
+    Player current = getCurrentPlayer();
 
-		if (deck.isEmpty()) {
-			if (discardPile.isEmpty()) {
-				logger.warn("Deck vide et aucune carte a recycler !");
-				passCount++;
-				if (passCount >= players.size() - 1 && lastPlayerWhoPlayed != null) {
-					logger.info("=== TOUS LES JOUEURS ONT PASSE → NOUVEAU TOUR ===");
-					resetTurn();
-					return;
-				}
-				nextTurn();
-				return;
-			}
-			reshuffleDiscardPile();
-		}
+    if (deck.isEmpty()) {
+        if (discardPile.isEmpty()) {
+            logger.warn("Deck vide et aucune carte a recycler !");
+            passCount++;
+            if (passCount >= players.size() - 1 && lastPlayerWhoPlayed != null && current == lastPlayerWhoPlayed) {
+                handleResetOrPass();
+                return;
+            }
+            nextTurn();
+            return;
+        }
+        reshuffleDiscardPile();
+    }
 
-		current.drawCard(deck);
-		logger.info(current.getId() + " a passe (pioche). Cartes restantes : " + deck.size());
+    current.drawCard(deck);
+    logger.info(current.getId() + " a passe (pioche). Cartes restantes : " + deck.size());
 
-		passCount++;
+    passCount++;
 
-		if (passCount >= players.size() - 1 && lastPlayerWhoPlayed != null) {
-			logger.info("=== TOUS LES JOUEURS ONT PASSE → NOUVEAU TOUR ===");
-			resetTurn();
-			return;
-		}
+    if (passCount >= players.size() - 1 && lastPlayerWhoPlayed != null && current == lastPlayerWhoPlayed) {
+        handleResetOrPass();
+        return;
+    }
 
-		nextTurn();
-	}
+    nextTurn();
+}
+
+private void handleResetOrPass() {
+    // Ne pas reset si c'est un 2
+    if (lastCombination != null && lastCombination.getType() == CombinationType.SIMPLE &&
+        lastCombination.getCards().get(0).getValue() == Card.Value.TWO) {
+        logger.info("Carte 2 sur le tas, pas de reset.");
+        passCount = 0;
+        nextTurn();  // Continuer normalement
+    } else {
+        resetTurn();  // Reset pour bombe ou combinaison normale
+    }
+}
 
 	private void resetTurn() {
-		logger.info("=== RESET DU TOUR ===");
-		lastCombination = null;
-		passCount = 0;
-		currentPlayerIndex = players.indexOf(lastPlayerWhoPlayed);
-		turnsInRound = 0;
-	}
+    logger.info("=== RESET DU TOUR ===");
+    
+    // Recycler les cartes de la défausse
+    if (!discardPile.isEmpty()) {
+        for (Card card : discardPile) {
+            deck.getCards().add(card);
+        }
+        discardPile.clear();
+        deck.shuffle();
+    }
+    
+    lastCombination = null;
+    passCount = 0;
+    currentPlayerIndex = players.indexOf(lastPlayerWhoPlayed);
+    turnsInRound = 0;
+}
 
 	private int findStartingPlayerIndex() {
 		Card smallestCard = null;

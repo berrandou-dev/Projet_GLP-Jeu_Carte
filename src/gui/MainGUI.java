@@ -41,14 +41,6 @@ public class MainGUI extends JFrame {
         runRobotTurns();
     }
 
-    private Card getFirstPlayerCard() {
-        for (Card card : game.getCurrentPlayer().getHand()) {
-            if (card.getValue() != Card.Value.JOKER && card.getValue() != Card.Value.TWO) {
-                return card;
-            }
-        }
-        return null;
-    }
 
     private void runRobotTurns() {
         if (game.isGameOver()) { showGameOver(); return; }

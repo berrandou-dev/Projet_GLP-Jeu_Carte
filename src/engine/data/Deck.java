@@ -11,23 +11,18 @@ public class Deck {
     public Deck() {
         cards = new ArrayList<>();
 
-        // 52 cartes normales
         for (Card.Suit suit : new Card.Suit[]{
-                Card.Suit.HEARTS,
-                Card.Suit.SPADES,
-                Card.Suit.DIAMONDS,
-                Card.Suit.CLUBS
-        }) {
-            for (Card.Value value : new Card.Value[]{
-                    Card.Value.ACE, Card.Value.KING, Card.Value.QUEEN,
-                    Card.Value.JACK, Card.Value.TEN, Card.Value.NINE,
-                    Card.Value.EIGHT, Card.Value.SEVEN, Card.Value.SIX,
-                    Card.Value.FIVE, Card.Value.FOUR, Card.Value.THREE,
-                    Card.Value.TWO
-            }) {
-                cards.add(new Card(value, suit));
-            }
-        }
+        	Card.Suit.HEARTS,
+        	Card.Suit.SPADES,
+        	Card.Suit.DIAMONDS,
+        	Card.Suit.CLUBS
+		}) {
+    		for (Card.Value value : Card.Value.values()) {
+        		if (value != Card.Value.JOKER) {
+            		cards.add(new Card(value, suit));
+        		}
+    		}
+		}
 
         // Ajouter 2 jokers séparément
         cards.add(new Card(Card.Value.JOKER, Card.Suit.JOKER));

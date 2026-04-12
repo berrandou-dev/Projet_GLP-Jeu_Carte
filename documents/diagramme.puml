@@ -1,0 +1,138 @@
+@startuml
+!theme plain
+
+' ===== STYLE GÉNÉRAL (fond clair, couleurs douces) =====
+skinparam backgroundColor #F9FAFB
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #3B82F6
+    FontColor #1F2937
+    FontName "Segoe UI"
+    FontSize 12
+    FontStyle bold
+}
+skinparam interface {
+    BackgroundColor #EFF6FF
+    BorderColor #3B82F6
+    FontColor #1F2937
+}
+skinparam enum {
+    BackgroundColor #ECFDF5
+    BorderColor #10B981
+    FontColor #1F2937
+}
+skinparam abstract {
+    BackgroundColor #F5F3FF
+    BorderColor #8B5CF6
+    FontColor #1F2937
+}
+skinparam arrow {
+    Color #6B7280
+}
+skinparam note {
+    BackgroundColor #FFFBEB
+    BorderColor #F59E0B
+    FontColor #1F2937
+    FontSize 10
+}
+
+title <color:#1E3A8A><size:18>Classes de données - Moteur du jeu "Tu n'y peux rien"</size></color>
+
+' ===== DÉFINITION DES CLASSES =====
+
+class "Card" as Card {
+    +
+    Représente une carte à jouer
+    --
+    Valeur (2->A) + Couleur(♥♠♦♣)
+}
+
+class "Deck" as Deck {
+    +
+    Pioche de 54 cartes
+    --
+    Distribution + Mélange
+}
+
+class "Player" as Player {
+    +
+    Joueur (humain)
+    --
+    Main de 5 cartes
+}
+
+abstract class "BotPlayer" as BotPlayer {
+    +
+    Classe mère des bots
+    --
+    Méthodes communes
+}
+
+class "EasyBot" as EasyBot {
+    +
+    Stratégie aléatoire
+    --
+    30% de chance de passer
+}
+
+class "MediumBot" as MediumBot {
+    +
+    Stratégie économique
+    --
+    Joue la plus faible
+}
+
+class "HardBot" as HardBot {
+    +
+    Stratégie optimale
+    --
+    5 priorités
+}
+
+class "Combination" as Combination {
+    +
+    Combinaison jouée
+    --
+    Validation + Comparaison
+}
+
+enum "CombinationType" as CombinationType {
+    SIMPLE
+    DOUBLE
+    SERIES
+    BOMB
+    DOUBLE_JOKER
+    INVALID
+}
+
+' ===== RELATIONS =====
+
+Deck "1" o-- "n" Card : <color:#2563EB>contient</color>
+Player "1" o-- "n" Card : <color:#2563EB>possède</color>
+
+Player <|-- BotPlayer : <color:#8B5CF6>hérite</color>
+
+BotPlayer <|-- EasyBot
+BotPlayer <|-- MediumBot
+BotPlayer <|-- HardBot
+
+Combination "1" *-- "n" Card : <color:#2563EB>composée de</color>
+Combination --> CombinationType : <color:#10B981>typée par</color>
+
+' ===== NOTES (ANNOTATIONS) - version concise =====
+
+note right of Card : <color:#D97706>Valeurs : 2→A (14)</color>\n<color:#D97706>Couleurs : ♥ ♠ ♦ ♣</color>\n<color:#D97706>Joker : carte spéciale</color>
+
+note left of BotPlayer : <color:#8B5CF6>Méthodes communes :</color>\n• getCombinaisonsJouables()\n• getToutesCombinaisonsValides()\n• trierParForce()
+
+note bottom of EasyBot : <color:#2563EB>Choix aléatoire</color>\n<color:#2563EB>30% chance de passer</color>
+
+note bottom of MediumBot : <color:#2563EB>Joue combinaison la plus faible</color>\n<color:#2563EB>Conserve bombes et jokers</color>
+
+note bottom of HardBot : <color:#8B5CF6>Priorités :</color>\n<color:#2563EB>1. Fin de partie (≤3 cartes)</color>\n<color:#2563EB>2. Ouverture (paire/série)</color>\n<color:#2563EB>3. Même type que précédent</color>\n<color:#2563EB>4. Bombe si nécessaire</color>
+
+note bottom of Combination : <color:#D97706>Types détectés :</color>\nSIMPLE / DOUBLE / SERIES\nBOMB / DOUBLE_JOKER
+
+note top of CombinationType : <color:#10B981>Hiérarchie de force :</color>\nSIMPLE(1) < DOUBLE(2) < SERIES(3)\n< BOMB(4) < DOUBLE_JOKER(5)
+
+@enduml

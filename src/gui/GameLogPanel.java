@@ -48,15 +48,15 @@ public class GameLogPanel extends JPanel {
 	 * A appeler depuis MainGUI apres chaque action de jeu.
 	 */
 	public void addLog(String message) {
-		logs.add(0, message);
-		while (logs.size() > MAX_LOGS) {
-			logs.remove(logs.size() - 1);
-		}
-		StringBuilder sb = new StringBuilder();
-		for (String log : logs) {
-			sb.append("• ").append(log).append("\n");
-		}
-		logArea.setText(sb.toString());
-		logArea.setCaretPosition(0);
+    	logs.add(message);  //
+    	while (logs.size() > MAX_LOGS) {
+        	logs.remove(0);
+    	}
+    	StringBuilder sb = new StringBuilder();
+    	for (String log : logs) {
+        	sb.append("• ").append(log).append("\n");
+    	}
+    	logArea.setText(sb.toString());
+    	logArea.setCaretPosition(logArea.getDocument().getLength());
 	}
 }

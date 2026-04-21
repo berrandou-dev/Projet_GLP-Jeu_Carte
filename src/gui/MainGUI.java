@@ -43,48 +43,67 @@ public class MainGUI extends JFrame {
 
 
     private void runRobotTurns() {
-        if (game.isGameOver()) { showGameOver(); return; }
-
-        if (game.isHumanTurn()) {
-            gameInfoBar.setControlsEnabled(true);
-            gameInfoBar.updateDisplay();
-            refreshHand();
-            return;
-        }
-
-        gameInfoBar.setControlsEnabled(false);
-        gameInfoBar.updateDisplay();
-
-        Timer timer = new Timer(900, e -> {
-            if (game.isGameOver()) { showGameOver(); return; }
-
-            Player current = game.getCurrentPlayer();
-            if (current instanceof BotPlayer) {
-                BotPlayer bot = (BotPlayer) current;
-                Combination choix = bot.choisirCombinaison(current.getHand(), game.getLastCombination());
-
-                if (choix != null) {
-                    game.playCombination(choix);
-                    lastPlayedCard = choix.getCards().get(choix.getCards().size() - 1);
-                    String msg = current.getId() + " joue : " + choix.toString();
-                    logPanel.addLog(msg);
-                    logger.info("[BOT] " + msg);
-                } else {
-                    game.drawCard();
-                    String msg = current.getId() + " pioche.";
-                    logPanel.addLog(msg);
-                    logger.info("[BOT] " + msg);
-                }
-            }
-
-            refreshDisplay();
-            runRobotTurns();
-        });
-        timer.setRepeats(false);
-        timer.start();
-    }
+    	game.checkResetAtTurnStart();
+    	String resetMsg = game.consumeResetMessage();
+    	if (resetMsg != null) logPanel.addLog(resetMsg);
+    
+    	if (game.isGameOver()) { 
+        	showGameOver(); 
+        	return; 
+    	}
+    
+    	if (game.isHumanTurn()) {
+        	gameInfoBar.setControlsEnabled(true);
+        	gameInfoBar.updateDisplay();
+        	refreshHand();
+        	return;
+    	}
+    
+    	gameInfoBar.setControlsEnabled(false);
+    	gameInfoBar.updateDisplay();
+    
+    	new Thread(() -> {
+        	try {
+            	Thread.sleep(900);
+        	} catch (InterruptedException e) {
+            	return;
+        	}
+        
+        	SwingUtilities.invokeLater(() -> {
+            	if (game.isGameOver()) { 
+                	showGameOver(); 
+                	return; 
+            	}
+            
+            	Player current = game.getCurrentPlayer();
+            	if (current instanceof BotPlayer) {
+                	BotPlayer bot = (BotPlayer) current;
+                	Combination choix = bot.choisirCombinaison(current.getHand(), game.getLastCombination());
+                
+                	if (choix != null) {
+                    	game.playCombination(choix);
+                    	lastPlayedCard = choix.getCards().get(choix.getCards().size() - 1);
+                    	String msg = current.getId() + " joue : " + choix.toString();
+                    	logPanel.addLog(msg);
+                    	logger.info("[BOT] " + msg);
+                	} else {
+                    	game.drawCard();
+                    	String msg = current.getId() + " pioche.";
+                    	logPanel.addLog(msg);
+                    	logger.info("[BOT] " + msg);
+                	}
+            	}
+            	refreshDisplay();
+            	runRobotTurns();
+        	});
+    	}).start();
+	}
 
     public void playSelectedCards() {
+    	game.checkResetAtTurnStart();
+    	String resetMsg = game.consumeResetMessage();
+    	if (resetMsg != null) logPanel.addLog(resetMsg);
+		
         List<CardPanel> selected = CardPanel.getSelectedPanels();
 
         if (selected.isEmpty()) {
@@ -120,6 +139,10 @@ public class MainGUI extends JFrame {
     }
 
     public void onHumanDraw() {
+    	game.checkResetAtTurnStart();
+    	String resetMsg = game.consumeResetMessage();
+    	if (resetMsg != null) logPanel.addLog(resetMsg);
+    
         game.drawCard();
         String msg = "Vous piochez une carte.";
         logPanel.addLog(msg);
@@ -143,10 +166,14 @@ public class MainGUI extends JFrame {
     }
 
     public void refreshDisplay() {
-        gameInfoBar.updateDisplay();
-        if (deckPanel != null) deckPanel.refreshCount();
-        updatePilePanel();
-    }
+    	String resetMsg = game.consumeResetMessage();
+    	if (resetMsg != null) {
+        	logPanel.addLog(resetMsg);
+    	}
+    	gameInfoBar.updateDisplay();
+    	if (deckPanel != null) deckPanel.refreshCount();
+    	updatePilePanel();
+	}
 
     private void updatePilePanel() {
         pilePanel.removeAll();

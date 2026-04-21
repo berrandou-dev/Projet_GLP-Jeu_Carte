@@ -52,9 +52,4 @@ public enum CombinationType {
 		}
 	}
 
-	public boolean canBeat(CombinationType other) {
-		if (this == DOUBLE_JOKER) return true;
-		if (this == BOMB && other != BOMB) return true;
-		return this.getStrength() > other.getStrength();
-	}
 }

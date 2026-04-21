@@ -15,11 +15,6 @@ public class DeckPanel extends JPanel {
         setBorder(BorderFactory.createLineBorder(Color.BLACK));
     }
 
-    @Deprecated
-    public void drawCard(Player player) {
-        System.out.println("[DeckPanel] Utilisez MainGUI.onHumanDraw() à la place.");
-    }
-
     public void refreshCount() {
         repaint();
     }

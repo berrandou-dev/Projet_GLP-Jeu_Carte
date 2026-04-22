@@ -45,7 +45,7 @@ public class EndGameGUI extends JFrame {
         setSize(860, 620);
         setLocationRelativeTo(null);
         setResizable(false);
-
+        MusicPlayer.stop();
         buildUI();
         setVisible(true);
     }

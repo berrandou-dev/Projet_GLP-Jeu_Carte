@@ -2,94 +2,145 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import engine.process.*;
 import config.GameConfig;
 
 public class GameInfoBar extends JPanel {
-    private Game game;
-    private JLabel roundLabel;
-    private JLabel currentPlayerLabel;
-    private JLabel lastCombinationLabel;
-    private JButton drawButton;
-    private static final String DICE   = "\uD83C\uDFB2";
-    private static final String PLAYER = "\uD83D\uDC64";
-    private static final String CARD   = "\uD83C\uDCCF";
 
-    private final Color COLOR_DRAW = new Color(60, 120, 180);
+    private Game    game;
+    private JLabel  roundLabel;
+    private JLabel  currentPlayerLabel;
+    private JLabel  lastCombinationLabel;
+    private JButton drawButton;
+    private JButton btnMute;
+
+    private static final String DICE   = "\uD83C\uDFB2";  // 🎲
+    private static final String PLAYER = "\uD83D\uDC64";  // 👤
+    private static final String CARD   = "\uD83C\uDCCF";  // 🃏
+
+    private final Color COLOR_DRAW     = new Color(60, 120, 180);
     private final Color COLOR_DISABLED = new Color(100, 100, 100);
 
-    public GameInfoBar(Game game, MainGUI mainGUI) {
+    /**
+     * Permet d'afficher emojis ET texte latin dans le même composant.
+     */
+    private static Font emojiFont(int style, int size) {
+        return new Font("Segoe UI Emoji", style, size);
+    }
+
+    public GameInfoBar(Game game, final MainGUI mainGUI) {
         this.game = game;
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(GameConfig.WINDOW_WIDTH, 80));
-        setBackground(new Color(40, 40, 60));
-        setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, new Color(255, 215, 0)));
+        setBackground(GameStyle.BG_DEEP);
+        setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, GameStyle.BORDER_GOLD));
 
-        // Info labels
+        //Info labels 
         JPanel infoPanel = new JPanel(new GridLayout(1, 3, 10, 0));
-        infoPanel.setBackground(new Color(40, 40, 60));
+        infoPanel.setBackground(GameStyle.BG_DEEP);
         infoPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        roundLabel = makeLabel(DICE + " Round: 1", Color.WHITE, GameConfig.FONT_LARGE);
-        currentPlayerLabel = makeLabel(PLAYER + " " + game.getCurrentPlayer().getId(), Color.WHITE, GameConfig.FONT_LARGE);
-        lastCombinationLabel = makeLabel(CARD + " Aucune", new Color(255, 200, 100), GameConfig.FONT_LARGE);
+        // makeLabel utilise emojiFont → 🎲 👤 🃏 s'affichent correctement
+        roundLabel           = makeLabel(DICE + " Round: 1",
+                                GameStyle.TEXT_MAIN, GameConfig.FONT_LARGE);
+        currentPlayerLabel   = makeLabel(PLAYER + " " + game.getCurrentPlayer().getId(),
+                                GameStyle.TEXT_MAIN, GameConfig.FONT_LARGE);
+        lastCombinationLabel = makeLabel(CARD + " Aucune",
+                                GameStyle.GOLD_DIM,  GameConfig.FONT_LARGE);
 
         infoPanel.add(roundLabel);
         infoPanel.add(currentPlayerLabel);
         infoPanel.add(lastCombinationLabel);
 
-        // Bouton PIOCHER uniquement
+        // Boutons PIOCHER + MUTE 
         JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        controlPanel.setBackground(new Color(40, 40, 60));
+        controlPanel.setBackground(GameStyle.BG_DEEP);
         controlPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 15));
 
-        drawButton = makeButton("\uD83C\uDCCF PIOCHER", COLOR_DRAW);
-        drawButton.addActionListener(e -> mainGUI.onHumanDraw());
+        // Bouton Piocher (texte seul, pas d'emoji)
+        drawButton = makeButton("PIOCHER", COLOR_DRAW);
+        drawButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mainGUI.onHumanDraw();
+            }
+        });
 
-        controlPanel.add(drawButton);  // Seulement le bouton pioche
+        // Bouton Mute — emojiFont pour afficher 
+        btnMute = GameStyle.blueButton("\uD83D\uDD07  Mute"); 
+        btnMute.setFont(emojiFont(Font.PLAIN, 16));
+        btnMute.setPreferredSize(new Dimension(140, 40));
+        btnMute.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MusicPlayer.togglePause();
+                if (MusicPlayer.isPlaying()) {
+                    btnMute.setText("\uD83D\uDD07  Mute");  
+                } else {
+                    btnMute.setText("\u25B6  Reprendre");    
+                }
+            }
+        });
 
-        add(infoPanel, BorderLayout.CENTER);
+        controlPanel.add(drawButton);
+        controlPanel.add(btnMute);
+
+        add(infoPanel,    BorderLayout.CENTER);
         add(controlPanel, BorderLayout.EAST);
     }
+
+    //Contrôles
 
     public void setControlsEnabled(boolean enabled) {
         drawButton.setEnabled(enabled);
         drawButton.setBackground(enabled ? COLOR_DRAW : COLOR_DISABLED);
     }
 
+    // Mise à jour de l'affichage
+
     public void updateDisplay() {
-        roundLabel.setText(DICE + " Round: " + game.getCurrentRound().getRoundNumber());
+        roundLabel.setText(DICE + " Round: "
+                + game.getCurrentRound().getRoundNumber());
 
         String id = game.getCurrentPlayer().getId();
         if (id.equals("Vous")) {
-            currentPlayerLabel.setText(PLAYER + " À VOUS !");
-            currentPlayerLabel.setForeground(new Color(255, 215, 0));
+            currentPlayerLabel.setText(PLAYER + " \u00C0 VOUS !");
+            currentPlayerLabel.setForeground(GameStyle.GOLD);
         } else {
-            currentPlayerLabel.setText(PLAYER + " " + id + " réfléchit…");
-            currentPlayerLabel.setForeground(new Color(180, 180, 180));
+            currentPlayerLabel.setText(PLAYER + " " + id + " r\u00E9fl\u00E9chit\u2026");
+            currentPlayerLabel.setForeground(GameStyle.TEXT_MUTED);
         }
 
         Combination last = game.getLastCombination();
         if (last != null) {
-            lastCombinationLabel.setText(CARD + " " + last.getType() + " (" + last.getCards().size() + ")");
-            lastCombinationLabel.setForeground(new Color(100, 200, 100));
+            lastCombinationLabel.setText(CARD + " "
+                    + last.getType() + " (" + last.getCards().size() + ")");
+            lastCombinationLabel.setForeground(GameStyle.GREEN_BRIGHT);
         } else {
             lastCombinationLabel.setText(CARD + " Aucune");
-            lastCombinationLabel.setForeground(new Color(255, 200, 100));
+            lastCombinationLabel.setForeground(GameStyle.GOLD_DIM);
         }
-        
 
         repaint();
     }
 
+    // Factories
+
+    /**
+     * JLabel avec police emoji — supporte 🎲 👤 🃏 et texte latin.
+     */
     private JLabel makeLabel(String text, Color color, int size) {
         JLabel lbl = new JLabel(text, SwingConstants.CENTER);
         lbl.setForeground(color);
-        lbl.setFont(new Font(GameConfig.FONT_NAME, Font.BOLD, size));
+        lbl.setFont(emojiFont(Font.BOLD, size));  // ← emojiFont, pas Arial
         return lbl;
     }
 
-    private JButton makeButton(String text, Color color) {
+    private JButton makeButton(String text, final Color color) {
         JButton btn = new JButton(text);
         btn.setFont(new Font(GameConfig.FONT_NAME, Font.BOLD, 12));
         btn.setForeground(Color.WHITE);
@@ -97,15 +148,16 @@ public class GameInfoBar extends JPanel {
         btn.setFocusPainted(false);
         btn.setBorder(BorderFactory.createEmptyBorder(6, 12, 6, 12));
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent e) {
+        btn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
                 if (btn.isEnabled()) btn.setBackground(color.brighter());
             }
-            public void mouseExited(java.awt.event.MouseEvent e) {
+            @Override
+            public void mouseExited(MouseEvent e) {
                 if (btn.isEnabled()) btn.setBackground(color);
             }
         });
         return btn;
     }
-    
 }

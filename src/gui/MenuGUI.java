@@ -17,7 +17,7 @@ public class MenuGUI extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(false);
-
+       
         buildUI();
         setVisible(true);
     }
@@ -113,4 +113,5 @@ public class MenuGUI extends JFrame {
 
         setContentPane(root);
     }
+
 }

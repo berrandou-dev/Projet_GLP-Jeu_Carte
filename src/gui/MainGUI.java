@@ -42,7 +42,7 @@ public class MainGUI extends JFrame {
 
         logger.info("Interface graphique demarree : " + nbJoueurs
                 + " joueurs, difficulte=" + difficulte);
-
+        MusicPlayer.play();
         setupUI();
         setVisible(true);
         runRobotTurns();

@@ -50,10 +50,8 @@ public class TestPlayer {
         
         assertEquals(2, player.getHandSize());
         
-        // Créer la combinaison avec les mêmes cartes (en utilisant les références)
+        // Créer la combinaison avec les mêmes cartes
         List<Card> toPlay = new ArrayList<>();
-        // Récupérer les vraies cartes de la main (pas une copie)
-        // On utilise la réflexion ou on modifie Player? Non, on utilise les cartes qu'on a créées
         toPlay.add(card1);
         toPlay.add(card2);
         
@@ -113,7 +111,8 @@ public class TestPlayer {
     @Test
     public void testGetHandReturnsCopy() {
         Player player = new Player("Testeur");
-        player.drawCard(new Deck());
+        Deck deck = new Deck();
+        player.drawCard(deck);
         
         List<Card> hand1 = player.getHand();
         List<Card> hand2 = player.getHand();

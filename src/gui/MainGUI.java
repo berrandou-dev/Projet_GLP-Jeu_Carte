@@ -32,21 +32,28 @@ public class MainGUI extends JFrame {
     private GameLogPanel logPanel;
 
     public MainGUI(String title, int nbJoueurs, String difficulte) {
-        super(title);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(GameConfig.WINDOW_WIDTH + 250, GameConfig.WINDOW_HEIGHT);
-        setLocationRelativeTo(null);
+    	super(title);
+    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	setResizable(true);
+    
+    	if (GameStyle.isFullscreen) {
+        	setExtendedState(JFrame.MAXIMIZED_BOTH);
+    	} else {
+        	setSize(GameConfig.WINDOW_WIDTH + 250, GameConfig.WINDOW_HEIGHT);
+    	}
+    
+    	setLocationRelativeTo(null);
 
-        game        = GameBuilder.buildGame(nbJoueurs, difficulte);
-        humanPlayer = GameBuilder.getHumanPlayer(game);
+    	game        = GameBuilder.buildGame(nbJoueurs, difficulte);
+    	humanPlayer = GameBuilder.getHumanPlayer(game);
 
-        logger.info("Interface graphique demarree : " + nbJoueurs
-                + " joueurs, difficulte=" + difficulte);
-        MusicPlayer.play();
-        setupUI();
-        setVisible(true);
-        runRobotTurns();
-    }
+    	logger.info("Interface graphique demarree : " + nbJoueurs
+            	+ " joueurs, difficulte=" + difficulte);
+    	MusicPlayer.play();
+    	setupUI();
+    	setVisible(true);
+    	runRobotTurns();
+	}
 
     // Robot turn loop
 

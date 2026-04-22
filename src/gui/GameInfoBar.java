@@ -56,35 +56,37 @@ public class GameInfoBar extends JPanel {
         infoPanel.add(currentPlayerLabel);
         infoPanel.add(lastCombinationLabel);
 
-        // Boutons PIOCHER + MUTE 
+        // Boutons Panel
         JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        controlPanel.setBackground(GameStyle.BG_DEEP);
-        controlPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 15));
+    	controlPanel.setBackground(GameStyle.BG_DEEP);
+    	controlPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 10, 15));
 
         // Bouton Piocher (texte seul, pas d'emoji)
         drawButton = makeButton("PIOCHER", COLOR_DRAW);
-        drawButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                mainGUI.onHumanDraw();
-            }
-        });
+    	drawButton.setPreferredSize(new Dimension(110, 45));
+    	drawButton.setFont(new Font(GameConfig.FONT_NAME, Font.BOLD, 14));
+    	drawButton.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+            	mainGUI.onHumanDraw();
+        	}
+    	});
 
         // Bouton Mute — emojiFont pour afficher 
-        btnMute = GameStyle.blueButton("\uD83D\uDD07  Mute"); 
-        btnMute.setFont(emojiFont(Font.PLAIN, 16));
-        btnMute.setPreferredSize(new Dimension(140, 40));
-        btnMute.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MusicPlayer.togglePause();
-                if (MusicPlayer.isPlaying()) {
-                    btnMute.setText("\uD83D\uDD07  Mute");  
-                } else {
-                    btnMute.setText("\u25B6  Reprendre");    
-                }
-            }
-        });
+        btnMute = GameStyle.blueButton("\uD83D\uDD07");
+    	btnMute.setFont(emojiFont(Font.PLAIN, 14));
+    	btnMute.setPreferredSize(new Dimension(48, 48));
+    	btnMute.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+            	MusicPlayer.togglePause();
+            	if (MusicPlayer.isPlaying()) {
+                	btnMute.setText("\uD83D\uDD07");
+            	} else {
+                	btnMute.setText("\u25B6");
+            	}
+        	}
+    	});
 
         controlPanel.add(drawButton);
         controlPanel.add(btnMute);

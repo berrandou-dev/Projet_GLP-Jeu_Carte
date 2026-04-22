@@ -13,17 +13,24 @@ public class MenuGUI extends JFrame {
 
     public MenuGUI() {
         super("Tu n'y peux rien");
-        setSize(900, 600);
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setResizable(false);
-       
+        setResizable(true);
+        
+        setMinimumSize(new Dimension(700, 500));
+        
+        if (GameStyle.isFullscreen) {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+        } else {
+            setSize(900, 600);
+        }
+        
+        setLocationRelativeTo(null);
         buildUI();
         setVisible(true);
     }
 
     private void buildUI() {
-        //Root: felt gradient
+        // Root: felt gradient
         JPanel root = GameStyle.feltPanel(new BorderLayout());
         root.setOpaque(true);
         root.setBorder(new EmptyBorder(40, 60, 40, 60));
@@ -49,7 +56,7 @@ public class MenuGUI extends JFrame {
 
         root.add(header, BorderLayout.NORTH);
 
-        //Center: buttons
+        // Center: buttons
         JPanel center = new JPanel();
         center.setOpaque(false);
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
@@ -57,7 +64,7 @@ public class MenuGUI extends JFrame {
         center.add(Box.createVerticalGlue());
 
         // Nouvelle partie
-        JButton btnNewGame = GameStyle.goldButton(" Nouvelle partie"); 
+        JButton btnNewGame = GameStyle.goldButton(" Nouvelle partie");
         btnNewGame.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnNewGame.addActionListener(new ActionListener() {
             @Override
@@ -67,20 +74,30 @@ public class MenuGUI extends JFrame {
             }
         });
 
-        // Plein écran
-        JButton btnFullscreen = GameStyle.blueButton("  Plein écran"); 
+        // Plein écran - avec sauvegarde de l'état
+        JButton btnFullscreen = GameStyle.blueButton(
+            GameStyle.isFullscreen ? "  Fenêtre normale" : "  Plein écran"
+        );
         btnFullscreen.setAlignmentX(Component.CENTER_ALIGNMENT);
-        final MenuGUI self = this;
+        
         btnFullscreen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                self.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                if (GameStyle.isFullscreen) {
+                    setExtendedState(JFrame.NORMAL);
+                    GameStyle.isFullscreen = false;
+                    btnFullscreen.setText("  Plein écran");
+                } else {
+                    setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    GameStyle.isFullscreen = true;
+                    btnFullscreen.setText("  Fenêtre normale");
+                }
             }
         });
 
         // Quitter
         JButton btnQuit = GameStyle.roundButton(
-                "\u274C  Quitter", GameStyle.ACCENT_RED, GameStyle.BG_DEEP); 
+                "\u274C  Quitter", GameStyle.ACCENT_RED, GameStyle.BG_DEEP);
         btnQuit.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnQuit.addActionListener(new ActionListener() {
             @Override
@@ -97,9 +114,36 @@ public class MenuGUI extends JFrame {
 
         center.add(Box.createVerticalGlue());
 
+        // Adapter les tailles des boutons à la fenêtre
+       addComponentListener(new java.awt.event.ComponentAdapter() {
+    @Override
+    public void componentResized(java.awt.event.ComponentEvent e) {
+        int w = getWidth();
+        int h = getHeight();
+
+        boolean fullscreen = GameStyle.isFullscreen;
+
+        int btnWidth  = (int)(w * (fullscreen ? 0.20 : 0.28));
+        int btnHeight = (int)(h * (fullscreen ? 0.07 : 0.10));
+
+        btnNewGame.setPreferredSize(new Dimension(btnWidth, btnHeight));
+        btnFullscreen.setPreferredSize(new Dimension(btnWidth, btnHeight));
+        btnQuit.setPreferredSize(new Dimension(btnWidth, btnHeight));
+
+        int fontSize = Math.max(14, Math.min(26, w / (fullscreen ? 45 : 35)));
+
+        btnNewGame.setFont(new Font("Arial", Font.BOLD, fontSize));
+        btnFullscreen.setFont(new Font("Arial", Font.BOLD, fontSize));
+        btnQuit.setFont(new Font("Arial", Font.BOLD, fontSize));
+
+        revalidate();
+        repaint();
+    }
+});
+
         root.add(center, BorderLayout.CENTER);
 
-        // Footer: version muted
+        // Footer
         JPanel footer = new JPanel();
         footer.setOpaque(false);
         footer.setLayout(new BoxLayout(footer, BoxLayout.Y_AXIS));
@@ -113,5 +157,4 @@ public class MenuGUI extends JFrame {
 
         setContentPane(root);
     }
-
 }

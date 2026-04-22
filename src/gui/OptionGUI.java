@@ -16,14 +16,29 @@ public class OptionGUI extends JFrame {
 
     private JLabel  lblNbJoueurs;
     private JLabel  lblDiffSelected;
+    
+    private JButton btnMoins;
+    private JButton btnPlus;
+    private JButton btnFacile;
+    private JButton btnNormal;
+    private JButton btnDifficile;
+    private JButton btnRetour;
+    private JButton btnDemarrer;
 
     public OptionGUI() {
         super("Options – Tu n'y peux rien");
-        setSize(900, 600);
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setResizable(false);
-
+        setResizable(true);
+        
+        setMinimumSize(new Dimension(700, 500));
+        
+        if (GameStyle.isFullscreen) {
+            setExtendedState(JFrame.MAXIMIZED_BOTH);
+        } else {
+            setSize(900, 600);
+        }
+        
+        setLocationRelativeTo(null);
         buildUI();
         setVisible(true);
     }
@@ -34,7 +49,7 @@ public class OptionGUI extends JFrame {
         root.setOpaque(true);
         root.setBorder(new EmptyBorder(30, 60, 30, 60));
 
-        //Header
+        // Header
         JPanel header = new JPanel();
         header.setOpaque(false);
         header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
@@ -49,7 +64,7 @@ public class OptionGUI extends JFrame {
 
         root.add(header, BorderLayout.NORTH);
 
-        //Center: options
+        // Center: options
         JPanel center = new JPanel();
         center.setOpaque(false);
         center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
@@ -65,8 +80,77 @@ public class OptionGUI extends JFrame {
         // Footer: Retour / Démarrer
         root.add(buildFooter(), BorderLayout.SOUTH);
 
+        // Adapter les tailles à la fenêtre
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            @Override
+            public void componentResized(java.awt.event.ComponentEvent e) {
+                adaptSizes();
+            }
+        });
+        
+        adaptSizes();
         setContentPane(root);
     }
+
+    private void adaptSizes() {
+    int w = getWidth();
+    int h = getHeight();
+
+    boolean fullscreen = GameStyle.isFullscreen;
+
+    // Ratios différents selon mode
+    double btnRatioW   = fullscreen ? 0.10 : 0.14;
+    double btnRatioH   = fullscreen ? 0.05 : 0.07;
+    double fontRatio   = fullscreen ? 1.2  : 0.9;
+
+    int btnWidth  = (int)(w * btnRatioW);
+    int btnHeight = (int)(h * btnRatioH);
+
+    int baseFont = Math.max(12, Math.min(24, w / 50));
+    int fontSize = (int)(baseFont * fontRatio);
+
+    // ---- JOUEURS ----
+    if (btnMoins != null) {
+        btnMoins.setPreferredSize(new Dimension(btnWidth, btnHeight));
+        btnPlus.setPreferredSize(new Dimension(btnWidth, btnHeight));
+
+        btnMoins.setFont(new Font("Arial", Font.BOLD, fontSize));
+        btnPlus.setFont(new Font("Arial", Font.BOLD, fontSize));
+
+        lblNbJoueurs.setFont(new Font("Georgia", Font.BOLD, fontSize + 10));
+    }
+
+    // ---- DIFFICULTÉ ----
+    if (btnFacile != null) {
+        int diffW = (int)(w * (fullscreen ? 0.09 : 0.12));
+        int diffH = (int)(h * (fullscreen ? 0.045 : 0.06));
+
+        btnFacile.setPreferredSize(new Dimension(diffW, diffH));
+        btnNormal.setPreferredSize(new Dimension(diffW, diffH));
+        btnDifficile.setPreferredSize(new Dimension(diffW, diffH));
+
+        btnFacile.setFont(new Font("Arial", Font.BOLD, fontSize - 2));
+        btnNormal.setFont(new Font("Arial", Font.BOLD, fontSize - 2));
+        btnDifficile.setFont(new Font("Arial", Font.BOLD, fontSize - 2));
+
+        lblDiffSelected.setFont(new Font("Arial", Font.BOLD, fontSize));
+    }
+
+    // ---- FOOTER ----
+    if (btnRetour != null) {
+        int footerW = (int)(w * (fullscreen ? 0.12 : 0.18));
+        int footerH = (int)(h * (fullscreen ? 0.055 : 0.075));
+
+        btnRetour.setPreferredSize(new Dimension(footerW, footerH));
+        btnDemarrer.setPreferredSize(new Dimension(footerW, footerH));
+
+        btnRetour.setFont(new Font("Arial", Font.BOLD, fontSize));
+        btnDemarrer.setFont(new Font("Arial", Font.BOLD, fontSize));
+    }
+
+    revalidate();
+    repaint();
+}
 
     // Section : nombre de joueurs
 
@@ -81,8 +165,7 @@ public class OptionGUI extends JFrame {
         lbl.setForeground(GameStyle.TEXT_MAIN);
 
         // Bouton -
-        JButton btnMoins = GameStyle.roundButton("-", GameStyle.GOLD, GameStyle.BG_DEEP);
-        btnMoins.setPreferredSize(new Dimension(46, 46));
+        btnMoins = GameStyle.roundButton("-", GameStyle.GOLD, GameStyle.BG_DEEP);
         btnMoins.setFont(new Font("Arial", Font.BOLD, 20));
 
         lblNbJoueurs = new JLabel(String.valueOf(nbJoueurs), SwingConstants.CENTER);
@@ -91,10 +174,8 @@ public class OptionGUI extends JFrame {
         lblNbJoueurs.setPreferredSize(new Dimension(50, 40));
 
         // Bouton +
-        JButton btnPlus = GameStyle.roundButton("+", GameStyle.GOLD, GameStyle.BG_DEEP);
-        btnPlus.setPreferredSize(new Dimension(46, 46));
+        btnPlus = GameStyle.roundButton("+", GameStyle.GOLD, GameStyle.BG_DEEP);
         btnPlus.setFont(new Font("Arial", Font.BOLD, 20));
-
 
         btnMoins.addActionListener(new ActionListener() {
             @Override
@@ -134,15 +215,9 @@ public class OptionGUI extends JFrame {
         lbl.setFont(GameStyle.FONT_BOLD);
         lbl.setForeground(GameStyle.TEXT_MAIN);
 
-        JButton btnFacile    = GameStyle.roundButton("Facile",    GameStyle.GREEN_BRIGHT, GameStyle.BG_DEEP);
-        JButton btnNormal    = GameStyle.roundButton("Normal",    GameStyle.GOLD,         GameStyle.BG_DEEP);
-        JButton btnDifficile = GameStyle.roundButton("Difficile", GameStyle.ACCENT_RED,   GameStyle.BG_DEEP);
-
-        // Taille compacte pour les 3 boutons de difficulté
-        Dimension diffBtnSize = new Dimension(130, 40);
-        btnFacile.setPreferredSize(diffBtnSize);
-        btnNormal.setPreferredSize(diffBtnSize);
-        btnDifficile.setPreferredSize(diffBtnSize);
+        btnFacile    = GameStyle.roundButton("Facile",    GameStyle.GREEN_BRIGHT, GameStyle.BG_DEEP);
+        btnNormal    = GameStyle.roundButton("Normal",    GameStyle.GOLD,         GameStyle.BG_DEEP);
+        btnDifficile = GameStyle.roundButton("Difficile", GameStyle.ACCENT_RED,   GameStyle.BG_DEEP);
 
         lblDiffSelected = new JLabel("[ Normal ]");
         lblDiffSelected.setFont(GameStyle.FONT_BOLD);
@@ -181,7 +256,7 @@ public class OptionGUI extends JFrame {
         return card;
     }
 
-    //Footer : Retour / Démarrer 
+    // Footer : Retour / Démarrer 
 
     private JPanel buildFooter() {
         JPanel p = new JPanel();
@@ -194,8 +269,8 @@ public class OptionGUI extends JFrame {
         JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 0));
         btnRow.setOpaque(false);
 
-        JButton btnRetour   = GameStyle.blueButton("  Retour");          
-        JButton btnDemarrer = GameStyle.goldButton(" Démarrer");  
+        btnRetour   = GameStyle.blueButton("  Retour");          
+        btnDemarrer = GameStyle.goldButton(" Démarrer");  
 
         final OptionGUI self = this;
 

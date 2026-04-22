@@ -12,6 +12,9 @@ import javax.swing.border.EmptyBorder;
 public final class GameStyle {
 
     private GameStyle() {}
+    
+    //Caractéristiques écrans
+    public static boolean isFullscreen = false;
 
     // Palette 
 

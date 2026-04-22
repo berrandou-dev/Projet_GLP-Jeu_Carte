@@ -20,6 +20,7 @@ public class Game {
 	private int turnsInRound;
 	private int passCount = 0;
 	private Player lastPlayerWhoPlayed = null;
+	private GameStats gameStats;
 
 	public Game(List<Player> players, Deck deck) {
 		this.players = new ArrayList<>(players);
@@ -45,6 +46,12 @@ public class Game {
 		if (this.currentPlayerIndex == -1) {
 			logger.warn("Aucun joueur de depart trouve, on prend le joueur humain par defaut.");
 			this.currentPlayerIndex = players.indexOf(humanPlayer);
+		}
+
+		// Initialise le suivi des statistiques
+		this.gameStats = new GameStats();
+		for (Player p : players) {
+			this.gameStats.registerPlayer(p.getId());
 		}
 
 		this.currentRound = new Round(1, getCurrentPlayer(), deck);
@@ -100,7 +107,12 @@ public class Game {
 		passCount = 0;
 		logger.info(currentPlayer.getId() + " a joue : " + combination.toString());
 
+		// Enregistrement des statistiques
+		gameStats.recordCombination(currentPlayer.getId(), combination);
+
 		if (!currentPlayer.hasCard()) {
+			gameStats.setWinner(currentPlayer.getId());
+			gameStats.setTotalRounds(currentRound.getRoundNumber());
 			logger.info("=== " + currentPlayer.getId() + " A GAGNE LA PARTIE ! ===");
 			return true;
 		}
@@ -264,6 +276,10 @@ public class Game {
 
 	public Combination getLastCombination() {
 		return lastCombination;
+	}
+
+	public GameStats getGameStats() {
+		return gameStats;
 	}
 	
 }

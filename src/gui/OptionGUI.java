@@ -1,143 +1,222 @@
 package gui;
 
-import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
+/**
+ * Écran de configuration de la partie (nb joueurs, difficulté).
+ */
 public class OptionGUI extends JFrame {
 
-    private int nbJoueurs = 3;
-    private JLabel lblNbJoueurs;
-    private String difficulte = "moyen"; // ← minuscules pour GameBuilder
+    private int    nbJoueurs  = 3;
+    private String difficulte = "moyen";
+
+    private JLabel  lblNbJoueurs;
+    private JLabel  lblDiffSelected;
 
     public OptionGUI() {
-        setTitle("Options");
+        super("Options – Tu n'y peux rien");
         setSize(900, 600);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setResizable(false);
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(new Color(20, 110, 20));
-
-        JLabel titre = new JLabel("Options", SwingConstants.CENTER);
-        titre.setForeground(Color.WHITE);
-        titre.setFont(new Font("Arial", Font.BOLD, 40));
-        titre.setBorder(BorderFactory.createEmptyBorder(30, 0, 20, 0));
-        mainPanel.add(titre, BorderLayout.NORTH);
-
-        JPanel centerPanel = new JPanel(new GridLayout(3, 1, 20, 20));
-        centerPanel.setBackground(new Color(20, 110, 20));
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
-
-        // ── Nombre de joueurs ──
-        JPanel joueursPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        joueursPanel.setBackground(new Color(20, 110, 20));
-
-        JLabel lblJoueur = new JLabel("Nombre de joueurs : ");
-        lblJoueur.setForeground(Color.WHITE);
-        lblJoueur.setFont(new Font("Arial", Font.BOLD, 22));
-
-        JButton btnMoins = createSmallButton("-");
-
-        lblNbJoueurs = new JLabel(String.valueOf(nbJoueurs));
-        lblNbJoueurs.setForeground(Color.WHITE);
-        lblNbJoueurs.setFont(new Font("Arial", Font.BOLD, 22));
-        lblNbJoueurs.setPreferredSize(new Dimension(40, 30));
-        lblNbJoueurs.setHorizontalAlignment(SwingConstants.CENTER);
-
-        JButton btnPlus = createSmallButton("+");
-
-        btnMoins.addActionListener(e -> {
-            if (nbJoueurs > 3) { nbJoueurs--; lblNbJoueurs.setText(String.valueOf(nbJoueurs)); }
-        });
-        btnPlus.addActionListener(e -> {
-            if (nbJoueurs < 5) { nbJoueurs++; lblNbJoueurs.setText(String.valueOf(nbJoueurs)); }
-        });
-
-        joueursPanel.add(lblJoueur);
-        joueursPanel.add(btnMoins);
-        joueursPanel.add(lblNbJoueurs);
-        joueursPanel.add(btnPlus);
-
-        // ── Difficulté ──
-        JPanel difficultePanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        difficultePanel.setBackground(new Color(20, 110, 20));
-
-        JLabel lblDiff = new JLabel("Difficulté : ");
-        lblDiff.setForeground(Color.WHITE);
-        lblDiff.setFont(new Font("Arial", Font.BOLD, 22));
-
-        JButton btnFacile    = createButton("Facile");
-        JButton btnNormal    = createButton("Normal");   // = moyen
-        JButton btnDifficile = createButton("Difficile");
-
-        // Indicateur visuel de la sélection courante
-        JLabel lblDiffSelected = new JLabel("[ Normal ]");
-        lblDiffSelected.setForeground(new Color(255, 215, 0));
-        lblDiffSelected.setFont(new Font("Arial", Font.BOLD, 18));
-
-        btnFacile.addActionListener(e -> {
-            difficulte = "facile";
-            lblDiffSelected.setText("[ Facile ]");
-        });
-        btnNormal.addActionListener(e -> {
-            difficulte = "moyen";
-            lblDiffSelected.setText("[ Normal ]");
-        });
-        btnDifficile.addActionListener(e -> {
-            difficulte = "difficile";
-            lblDiffSelected.setText("[ Difficile ]");
-        });
-
-        difficultePanel.add(lblDiff);
-        difficultePanel.add(btnFacile);
-        difficultePanel.add(btnNormal);
-        difficultePanel.add(btnDifficile);
-        difficultePanel.add(lblDiffSelected);
-
-        // ── Boutons bas ──
-        JPanel boutonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 10));
-        boutonsPanel.setBackground(new Color(20, 110, 20));
-
-        JButton btnRetour   = createButton("Retour");
-        JButton btnDemarrer = createButton("Démarrer");
-        btnRetour.setPreferredSize(new Dimension(200, 50));
-        btnDemarrer.setPreferredSize(new Dimension(200, 50));
-
-        btnRetour.addActionListener(e -> {
-            new MenuGUI().setVisible(true);
-            dispose();
-        });
-
-        btnDemarrer.addActionListener(e -> {
-            // difficulte est déjà en minuscules ("facile"/"moyen"/"difficile")
-            new MainGUI("Jeu de cartes", nbJoueurs, difficulte);
-            dispose();
-        });
-
-        boutonsPanel.add(btnRetour);
-        boutonsPanel.add(btnDemarrer);
-
-        centerPanel.add(joueursPanel);
-        centerPanel.add(difficultePanel);
-        centerPanel.add(boutonsPanel);
-
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
-        add(mainPanel);
+        buildUI();
         setVisible(true);
     }
 
-    private JButton createButton(String text) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Arial", Font.BOLD, 18));
-        button.setBackground(Color.WHITE);
-        return button;
+    private void buildUI() {
+        // Root: felt gradient
+        JPanel root = GameStyle.feltPanel(new BorderLayout());
+        root.setOpaque(true);
+        root.setBorder(new EmptyBorder(30, 60, 30, 60));
+
+        //Header
+        JPanel header = new JPanel();
+        header.setOpaque(false);
+        header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
+
+        JLabel title = GameStyle.titleLabel(" Options de partie"); 
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        header.add(title);
+        header.add(Box.createVerticalStrut(10));
+        header.add(GameStyle.goldSeparator());
+        header.add(Box.createVerticalStrut(20));
+
+        root.add(header, BorderLayout.NORTH);
+
+        //Center: options
+        JPanel center = new JPanel();
+        center.setOpaque(false);
+        center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+
+        center.add(Box.createVerticalGlue());
+        center.add(buildPlayersSection());
+        center.add(Box.createVerticalStrut(30));
+        center.add(buildDifficultySection());
+        center.add(Box.createVerticalGlue());
+
+        root.add(center, BorderLayout.CENTER);
+
+        // Footer: Retour / Démarrer
+        root.add(buildFooter(), BorderLayout.SOUTH);
+
+        setContentPane(root);
     }
 
-    private JButton createSmallButton(String text) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Arial", Font.BOLD, 18));
-        button.setBackground(Color.WHITE);
-        button.setPreferredSize(new Dimension(50, 40));
-        return button;
+    // Section : nombre de joueurs
+
+    private JPanel buildPlayersSection() {
+        JPanel card = GameStyle.roundedPanel(GameStyle.BG_SURFACE, GameStyle.BORDER_GOLD);
+        card.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 16));
+        card.setMaximumSize(new Dimension(700, 80));
+        card.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel lbl = new JLabel("  Nombre de joueurs :"); 
+        lbl.setFont(GameStyle.FONT_BOLD);
+        lbl.setForeground(GameStyle.TEXT_MAIN);
+
+        // Bouton -
+        JButton btnMoins = GameStyle.roundButton("-", GameStyle.GOLD, GameStyle.BG_DEEP);
+        btnMoins.setPreferredSize(new Dimension(46, 46));
+        btnMoins.setFont(new Font("Arial", Font.BOLD, 20));
+
+        lblNbJoueurs = new JLabel(String.valueOf(nbJoueurs), SwingConstants.CENTER);
+        lblNbJoueurs.setFont(new Font("Georgia", Font.BOLD, 26));
+        lblNbJoueurs.setForeground(GameStyle.GOLD);
+        lblNbJoueurs.setPreferredSize(new Dimension(50, 40));
+
+        // Bouton +
+        JButton btnPlus = GameStyle.roundButton("+", GameStyle.GOLD, GameStyle.BG_DEEP);
+        btnPlus.setPreferredSize(new Dimension(46, 46));
+        btnPlus.setFont(new Font("Arial", Font.BOLD, 20));
+
+
+        btnMoins.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (nbJoueurs > 3) {
+                    nbJoueurs--;
+                    lblNbJoueurs.setText(String.valueOf(nbJoueurs));
+                }
+            }
+        });
+        btnPlus.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (nbJoueurs < 5) {
+                    nbJoueurs++;
+                    lblNbJoueurs.setText(String.valueOf(nbJoueurs));
+                }
+            }
+        });
+
+        card.add(lbl);
+        card.add(btnMoins);
+        card.add(lblNbJoueurs);
+        card.add(btnPlus);
+        return card;
+    }
+
+    // Section : difficulté
+
+    private JPanel buildDifficultySection() {
+        JPanel card = GameStyle.roundedPanel(GameStyle.BG_SURFACE, GameStyle.BORDER_GOLD);
+        card.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
+        card.setMaximumSize(new Dimension(700, 80));
+        card.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel lbl = new JLabel("  Difficulté :"); 
+        lbl.setFont(GameStyle.FONT_BOLD);
+        lbl.setForeground(GameStyle.TEXT_MAIN);
+
+        JButton btnFacile    = GameStyle.roundButton("Facile",    GameStyle.GREEN_BRIGHT, GameStyle.BG_DEEP);
+        JButton btnNormal    = GameStyle.roundButton("Normal",    GameStyle.GOLD,         GameStyle.BG_DEEP);
+        JButton btnDifficile = GameStyle.roundButton("Difficile", GameStyle.ACCENT_RED,   GameStyle.BG_DEEP);
+
+        // Taille compacte pour les 3 boutons de difficulté
+        Dimension diffBtnSize = new Dimension(130, 40);
+        btnFacile.setPreferredSize(diffBtnSize);
+        btnNormal.setPreferredSize(diffBtnSize);
+        btnDifficile.setPreferredSize(diffBtnSize);
+
+        lblDiffSelected = new JLabel("[ Normal ]");
+        lblDiffSelected.setFont(GameStyle.FONT_BOLD);
+        lblDiffSelected.setForeground(GameStyle.GOLD);
+
+        btnFacile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                difficulte = "facile";
+                lblDiffSelected.setText("[ Facile ]");
+                lblDiffSelected.setForeground(GameStyle.GREEN_BRIGHT);
+            }
+        });
+        btnNormal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                difficulte = "moyen";
+                lblDiffSelected.setText("[ Normal ]");
+                lblDiffSelected.setForeground(GameStyle.GOLD);
+            }
+        });
+        btnDifficile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                difficulte = "difficile";
+                lblDiffSelected.setText("[ Difficile ]");
+                lblDiffSelected.setForeground(GameStyle.ACCENT_RED);
+            }
+        });
+
+        card.add(lbl);
+        card.add(btnFacile);
+        card.add(btnNormal);
+        card.add(btnDifficile);
+        card.add(lblDiffSelected);
+        return card;
+    }
+
+    //Footer : Retour / Démarrer 
+
+    private JPanel buildFooter() {
+        JPanel p = new JPanel();
+        p.setOpaque(false);
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+
+        p.add(GameStyle.goldSeparator());
+        p.add(Box.createVerticalStrut(16));
+
+        JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 0));
+        btnRow.setOpaque(false);
+
+        JButton btnRetour   = GameStyle.blueButton("  Retour");          
+        JButton btnDemarrer = GameStyle.goldButton(" Démarrer");  
+
+        final OptionGUI self = this;
+
+        btnRetour.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new MenuGUI();
+                self.dispose();
+            }
+        });
+        btnDemarrer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new MainGUI("Jeu de cartes", nbJoueurs, difficulte);
+                self.dispose();
+            }
+        });
+
+        btnRow.add(btnRetour);
+        btnRow.add(btnDemarrer);
+        p.add(btnRow);
+        return p;
     }
 }

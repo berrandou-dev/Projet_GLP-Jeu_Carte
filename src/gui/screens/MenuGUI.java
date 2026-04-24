@@ -1,6 +1,7 @@
 package gui.screens;
 
 import java.awt.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
@@ -10,6 +11,10 @@ import config.GameConfig;
 import gui.utils.GameStyle;
 import gui.panels.*;
 import config.GameConfig;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * Menu principal du jeu.
@@ -30,7 +35,26 @@ public class MenuGUI extends JFrame {
         buildUI();
         setVisible(true);
     }
+    
+    private String chargerRegles() {
+        try {
+            java.io.InputStream is = getClass().getResourceAsStream("/resources/note.txt");
 
+            if (is == null) {
+                return "Fichier de règles introuvable.";
+            }
+
+            java.util.Scanner scanner = new java.util.Scanner(is, "UTF-8");
+            scanner.useDelimiter("\\A");
+
+            String texte = scanner.hasNext() ? scanner.next() : "Fichier de règles vide.";
+            scanner.close();
+
+            return texte;
+        } catch (Exception e) {
+            return "Erreur lors du chargement des règles.";
+        }
+    }
     private void buildUI() {
         // Root: felt gradient
         JPanel root = GameStyle.feltPanel(new BorderLayout());
@@ -107,13 +131,31 @@ public class MenuGUI extends JFrame {
                 System.exit(0);
             }
         });
+        
+        //Regles du jeu
+        
+        JButton btnRules = GameStyle.purpleButton(
+        		"Règles");
+        btnRules.setAlignmentX(CENTER_ALIGNMENT);
+        btnRules.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(
+                    MenuGUI.this,
+                    chargerRegles(),
+                    "Règles",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+        });
 
         center.add(btnNewGame);
         center.add(Box.createVerticalStrut(18));
         center.add(btnFullscreen);
         center.add(Box.createVerticalStrut(18));
+        center.add(btnRules);
+        center.add(Box.createVerticalStrut(18));
         center.add(btnQuit);
-
         center.add(Box.createVerticalGlue());
 
         // Adapter les tailles des boutons à la fenêtre
@@ -130,12 +172,14 @@ public class MenuGUI extends JFrame {
 
         btnNewGame.setPreferredSize(new Dimension(btnWidth, btnHeight));
         btnFullscreen.setPreferredSize(new Dimension(btnWidth, btnHeight));
+        btnRules.setPreferredSize(new Dimension(btnWidth, btnHeight));
         btnQuit.setPreferredSize(new Dimension(btnWidth, btnHeight));
 
         int fontSize = Math.max(14, Math.min(26, w / (fullscreen ? 45 : 35)));
 
         btnNewGame.setFont(new Font("Arial", Font.BOLD, fontSize));
         btnFullscreen.setFont(new Font("Arial", Font.BOLD, fontSize));
+        btnRules.setFont(new Font("Arial", Font.BOLD, fontSize));
         btnQuit.setFont(new Font("Arial", Font.BOLD, fontSize));
 
         revalidate();

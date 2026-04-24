@@ -3,7 +3,6 @@ package gui.utils;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 /**
  * Shared visual constants and factory methods for the game's GUI.
@@ -144,6 +143,11 @@ public final class GameStyle {
     public static JButton blueButton(String text) {
         return roundButton(text, ACCENT_BLUE, BG_DEEP);
     }
+    
+    /** Convenience: purple-bordered button. */
+    public static JButton purpleButton(String text) {
+        return roundButton(text, ACCENT_PURPLE, BG_DEEP);
+    }
 
     //Labels
 
@@ -206,4 +210,5 @@ public final class GameStyle {
         p.setOpaque(false);
         return p;
     }
+    
 }

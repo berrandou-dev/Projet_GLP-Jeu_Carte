@@ -1,6 +1,6 @@
 package test;
 
-import gui.MenuGUI;
+import gui.screens.MenuGUI;
 
 public class TestGame {
     public static void main(String[] args) {

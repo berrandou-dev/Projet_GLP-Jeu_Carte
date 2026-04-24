@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import config.GameConfig;
+
 /**
  * Écran de configuration de la partie (nb joueurs, difficulté).
  */
@@ -16,6 +18,8 @@ public class OptionGUI extends JFrame {
 
     private JLabel  lblNbJoueurs;
     private JLabel  lblDiffSelected;
+    private JPanel  playersSection;
+    private JPanel  difficultySection;
     
     private JButton btnMoins;
     private JButton btnPlus;
@@ -24,19 +28,18 @@ public class OptionGUI extends JFrame {
     private JButton btnDifficile;
     private JButton btnRetour;
     private JButton btnDemarrer;
+    private JPanel  footerButtonsRow;
 
     public OptionGUI() {
         super("Options – Tu n'y peux rien");
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(true);
         
-        setMinimumSize(new Dimension(700, 500));
-        
-        if (GameStyle.isFullscreen) {
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
-        } else {
-            setSize(900, 600);
-        }
+          if (GameStyle.isFullscreen) {
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
+} else {
+    setSize(GameConfig.WINDOW_WIDTH , GameConfig.WINDOW_HEIGHT);
+}
         
         setLocationRelativeTo(null);
         buildUI();
@@ -99,9 +102,9 @@ public class OptionGUI extends JFrame {
     boolean fullscreen = GameStyle.isFullscreen;
 
     // Ratios différents selon mode
-    double btnRatioW   = fullscreen ? 0.10 : 0.14;
+    double btnRatioW   = fullscreen ? 0.11 : 0.14;
     double btnRatioH   = fullscreen ? 0.05 : 0.07;
-    double fontRatio   = fullscreen ? 1.2  : 0.9;
+    double fontRatio   = fullscreen ? 1.1  : 0.9;
 
     int btnWidth  = (int)(w * btnRatioW);
     int btnHeight = (int)(h * btnRatioH);
@@ -119,11 +122,15 @@ public class OptionGUI extends JFrame {
 
         lblNbJoueurs.setFont(new Font("Georgia", Font.BOLD, fontSize + 10));
     }
+    if (playersSection != null) {
+        int sectionW = fullscreen ? Math.min(980, w - 160) : 700;
+        playersSection.setMaximumSize(new Dimension(sectionW, Math.max(90, btnHeight + 34)));
+    }
 
     // ---- DIFFICULTÉ ----
     if (btnFacile != null) {
-        int diffW = (int)(w * (fullscreen ? 0.09 : 0.12));
-        int diffH = (int)(h * (fullscreen ? 0.045 : 0.06));
+        int diffW = (int)(w * (fullscreen ? 0.13 : 0.12));
+        int diffH = (int)(h * (fullscreen ? 0.05 : 0.06));
 
         btnFacile.setPreferredSize(new Dimension(diffW, diffH));
         btnNormal.setPreferredSize(new Dimension(diffW, diffH));
@@ -135,10 +142,14 @@ public class OptionGUI extends JFrame {
 
         lblDiffSelected.setFont(new Font("Arial", Font.BOLD, fontSize));
     }
+    if (difficultySection != null) {
+        int sectionW = fullscreen ? Math.min(1160, w - 120) : 700;
+        difficultySection.setMaximumSize(new Dimension(sectionW, Math.max(96, (int)(h * 0.11))));
+    }
 
     // ---- FOOTER ----
     if (btnRetour != null) {
-        int footerW = (int)(w * (fullscreen ? 0.12 : 0.18));
+        int footerW = (int)(w * (fullscreen ? 0.16 : 0.18));
         int footerH = (int)(h * (fullscreen ? 0.055 : 0.075));
 
         btnRetour.setPreferredSize(new Dimension(footerW, footerH));
@@ -146,6 +157,13 @@ public class OptionGUI extends JFrame {
 
         btnRetour.setFont(new Font("Arial", Font.BOLD, fontSize));
         btnDemarrer.setFont(new Font("Arial", Font.BOLD, fontSize));
+    }
+    if (footerButtonsRow != null) {
+        footerButtonsRow.setLayout(new FlowLayout(
+                FlowLayout.CENTER,
+                fullscreen ? 50 : 30,
+                0
+        ));
     }
 
     revalidate();
@@ -159,6 +177,7 @@ public class OptionGUI extends JFrame {
         card.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 16));
         card.setMaximumSize(new Dimension(700, 80));
         card.setAlignmentX(Component.CENTER_ALIGNMENT);
+        playersSection = card;
 
         JLabel lbl = new JLabel("  Nombre de joueurs :"); 
         lbl.setFont(GameStyle.FONT_BOLD);
@@ -210,6 +229,7 @@ public class OptionGUI extends JFrame {
         card.setLayout(new FlowLayout(FlowLayout.CENTER, 16, 16));
         card.setMaximumSize(new Dimension(700, 80));
         card.setAlignmentX(Component.CENTER_ALIGNMENT);
+        difficultySection = card;
 
         JLabel lbl = new JLabel("  Difficulté :"); 
         lbl.setFont(GameStyle.FONT_BOLD);
@@ -268,6 +288,7 @@ public class OptionGUI extends JFrame {
 
         JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 0));
         btnRow.setOpaque(false);
+        footerButtonsRow = btnRow;
 
         btnRetour   = GameStyle.blueButton("  Retour");          
         btnDemarrer = GameStyle.goldButton(" Démarrer");  

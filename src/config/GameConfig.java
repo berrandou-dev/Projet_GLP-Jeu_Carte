@@ -5,8 +5,8 @@ import java.awt.Color;
 public class GameConfig {
     
     // Fenêtre
-    public static final int WINDOW_WIDTH = 800;
-    public static final int WINDOW_HEIGHT = 600;
+    public static final int WINDOW_WIDTH = 1200;
+    public static final int WINDOW_HEIGHT = 650;
     
     // Jeu
     public static final int INITIAL_HAND_SIZE = 5;

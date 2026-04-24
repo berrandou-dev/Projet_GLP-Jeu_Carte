@@ -73,17 +73,18 @@ public class GameInfoBar extends JPanel {
     	});
 
         // Bouton Mute — emojiFont pour afficher 
-        btnMute = GameStyle.blueButton("\uD83D\uDD07");
-    	btnMute.setFont(emojiFont(Font.PLAIN, 14));
-    	btnMute.setPreferredSize(new Dimension(48, 48));
+        btnMute = GameStyle.blueButton("ON");
+    	btnMute.setFont(new Font(GameConfig.FONT_NAME, Font.BOLD, 12));
+    	btnMute.setForeground(Color.WHITE);
+    	btnMute.setPreferredSize(new Dimension(70, 48));
     	btnMute.addActionListener(new ActionListener() {
         	@Override
         	public void actionPerformed(ActionEvent e) {
             	MusicPlayer.togglePause();
             	if (MusicPlayer.isPlaying()) {
-                	btnMute.setText("\uD83D\uDD07");
+                	btnMute.setText("ON");
             	} else {
-                	btnMute.setText("\u25B6");
+                	btnMute.setText("MUTE");
             	}
         	}
     	});

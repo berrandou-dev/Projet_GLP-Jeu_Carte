@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import config.GameConfig;
+
 /**
  * Menu principal du jeu.
  */
@@ -16,14 +18,11 @@ public class MenuGUI extends JFrame {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setResizable(true);
         
-        setMinimumSize(new Dimension(700, 500));
-        
-        if (GameStyle.isFullscreen) {
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
-        } else {
-            setSize(900, 600);
-        }
-        
+          if (GameStyle.isFullscreen) {
+    setExtendedState(JFrame.MAXIMIZED_BOTH);
+} else {
+    setSize(GameConfig.WINDOW_WIDTH , GameConfig.WINDOW_HEIGHT);
+}
         setLocationRelativeTo(null);
         buildUI();
         setVisible(true);

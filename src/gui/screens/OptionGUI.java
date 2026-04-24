@@ -1,4 +1,4 @@
-package gui;
+package gui.screens;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -6,6 +6,9 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import config.GameConfig;
+import gui.utils.GameStyle;
+import gui.panels.*;
 import config.GameConfig;
 
 /**

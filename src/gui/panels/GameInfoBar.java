@@ -1,4 +1,4 @@
-package gui;
+package gui.panels;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +8,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import engine.process.*;
 import config.GameConfig;
+import gui.utils.GameStyle;
+import gui.utils.MusicPlayer;
+import gui.screens.MainGUI;
 
 public class GameInfoBar extends JPanel {
 

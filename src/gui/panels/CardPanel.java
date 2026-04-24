@@ -1,4 +1,4 @@
-package gui;
+package gui.panels;
 
 import engine.data.*;
 import java.awt.*;
@@ -6,6 +6,7 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
+import gui.utils.CardPaintStrategy;
 
 public class CardPanel extends JPanel {
     private Card card;

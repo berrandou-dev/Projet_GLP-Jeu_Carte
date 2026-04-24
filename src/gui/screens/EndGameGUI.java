@@ -1,13 +1,16 @@
-package gui;
+package gui.screens;
 
+import gui.utils.GameStyle;
+import gui.utils.MusicPlayer;
+import gui.panels.*;
+import engine.data.GameStats;
+import engine.data.GameStats.PlayerStats;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.util.*;
 import java.util.List;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import engine.data.GameStats;
-import engine.data.GameStats.PlayerStats;
 
 /**
  * End-of-game screen showing statistics and scores for all players.

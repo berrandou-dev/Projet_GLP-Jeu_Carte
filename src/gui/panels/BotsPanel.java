@@ -1,4 +1,4 @@
-package gui;
+package gui.panels;
 
 import engine.data.Player;
 import engine.process.Game;
@@ -7,13 +7,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import javax.imageio.ImageIO;
+import gui.utils.GameStyle;
 
 public class BotsPanel extends JPanel {
 
-    private static final String ROBOT_IMAGE_PATH = "C:\\Users\\HP\\Pictures\\petitbonhommeglp.jpeg";
+    private static final String ROBOT_IMAGE_PATH = "/resources/petitbonhommeglp.jpeg";
     private static final int AVATAR_SIZE = 70;
     private static final int BADGE_R     = 11;
     private static final int LABEL_H     = 18;
@@ -33,11 +34,18 @@ public class BotsPanel extends JPanel {
 
     private static BufferedImage loadRobotImage() {
         try {
-            return ImageIO.read(new File(ROBOT_IMAGE_PATH));
+            URL url = BotsPanel.class.getResource(ROBOT_IMAGE_PATH);
+            if (url == null) {
+                System.err.println("[BotsPanel] Image introuvable : " + ROBOT_IMAGE_PATH);
+                return null;
+            }
+            return ImageIO.read(url);
         } catch (IOException ex) {
+            System.err.println("[BotsPanel] Erreur chargement image : " + ex.getMessage());
             return null;
         }
     }
+
 
     @Override
     protected void paintComponent(Graphics g) {

@@ -1,9 +1,10 @@
-package gui;
+package gui.panels;
 
 import java.awt.*;
 import javax.swing.*;
 import engine.data.*;
 import config.GameConfig;
+
 
 public class DeckPanel extends JPanel {
 

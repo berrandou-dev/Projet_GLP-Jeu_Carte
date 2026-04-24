@@ -1,4 +1,4 @@
-package gui;
+package gui.screens;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,6 +21,8 @@ import engine.data.Player;
 import engine.process.Game;
 import engine.process.GameBuilder;
 import log.LoggerUtility;
+import gui.panels.*;
+import gui.utils.*;
 
 public class MainGUI extends JFrame {
 

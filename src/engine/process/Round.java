@@ -11,7 +11,7 @@ public class Round {
     public Round(int roundNumber, Player player, Deck deck) {
         this.roundNumber = roundNumber;
         this.currentPlayer = player;
-        this.setDeck(deck);
+        this.deck = deck;
         this.roundComplete = false;
     }
 
@@ -36,11 +36,4 @@ public class Round {
         return currentPlayer;
     }
 
-	public Deck getDeck() {
-		return deck;
-	}
-
-	public void setDeck(Deck deck) {
-		this.deck = deck;
-	}
 }

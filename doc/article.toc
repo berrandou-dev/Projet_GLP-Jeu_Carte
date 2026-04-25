@@ -1,0 +1,54 @@
+\babel@toc {french}{}\relax 
+\babel@toc {french}{}\relax 
+\contentsline {section}{Remerciements}{2}{}%
+\contentsline {section}{\numberline {1}Introduction}{3}{}%
+\contentsline {subsection}{\numberline {1.1}Contexte du projet}{3}{}%
+\contentsline {paragraph}{}{3}{}%
+\contentsline {subsection}{\numberline {1.2}Objectif du projet}{3}{}%
+\contentsline {paragraph}{}{3}{}%
+\contentsline {subsection}{\numberline {1.3}Organisation du rapport}{3}{}%
+\contentsline {paragraph}{}{3}{}%
+\contentsline {section}{\numberline {2}Spécification du projet}{4}{}%
+\contentsline {subsection}{\numberline {2.1}Notions de base et contraintes du projet}{4}{}%
+\contentsline {subsubsection}{\numberline {2.1.1}Fonctionnement général du logiciel}{4}{}%
+\contentsline {paragraph}{}{4}{}%
+\contentsline {subsubsection}{\numberline {2.1.2}Notions et terminologies de base}{4}{}%
+\contentsline {paragraph}{}{4}{}%
+\contentsline {subsubsection}{\numberline {2.1.3}Contraintes et limitations connues}{4}{}%
+\contentsline {paragraph}{}{4}{}%
+\contentsline {subsection}{\numberline {2.2}Fonctionnalités attendues du projet}{4}{}%
+\contentsline {paragraph}{Fonctionnalités implémentées}{4}{}%
+\contentsline {section}{\numberline {3}Conception et mise en œuvre}{5}{}%
+\contentsline {subsection}{\numberline {3.1}Architecture globale du logiciel}{5}{}%
+\contentsline {paragraph}{}{5}{}%
+\contentsline {subsection}{\numberline {3.2}Classes de données (engine.data)}{5}{}%
+\contentsline {paragraph}{}{5}{}%
+\contentsline {subsection}{\numberline {3.3}Traitements (engine.process)}{5}{}%
+\contentsline {paragraph}{}{5}{}%
+\contentsline {subsection}{\numberline {3.4}IHM Graphique (gui)}{5}{}%
+\contentsline {paragraph}{}{5}{}%
+\contentsline {subsection}{\numberline {3.5}Patterns de conception utilisés}{5}{}%
+\contentsline {paragraph}{}{5}{}%
+\contentsline {section}{\numberline {4}Manuel utilisateur}{6}{}%
+\contentsline {subsection}{\numberline {4.1}Lancement du jeu}{6}{}%
+\contentsline {paragraph}{}{6}{}%
+\contentsline {subsection}{\numberline {4.2}Configuration de la partie}{6}{}%
+\contentsline {paragraph}{}{6}{}%
+\contentsline {subsection}{\numberline {4.3}Déroulement d'une partie}{7}{}%
+\contentsline {paragraph}{}{7}{}%
+\contentsline {subsection}{\numberline {4.4}Fin de partie}{7}{}%
+\contentsline {paragraph}{}{7}{}%
+\contentsline {section}{\numberline {5}Déroulement du projet}{8}{}%
+\contentsline {subsection}{\numberline {5.1}Réalisation du projet par étapes}{8}{}%
+\contentsline {paragraph}{}{8}{}%
+\contentsline {subsection}{\numberline {5.2}Répartition des tâches, communication et intégration}{8}{}%
+\contentsline {paragraph}{}{8}{}%
+\contentsline {paragraph}{}{8}{}%
+\contentsline {paragraph}{}{8}{}%
+\contentsline {section}{\numberline {6}Conclusion et perspectives}{9}{}%
+\contentsline {subsection}{\numberline {6.1}Résumé du travail réalisé}{9}{}%
+\contentsline {paragraph}{}{9}{}%
+\contentsline {paragraph}{}{9}{}%
+\contentsline {subsection}{\numberline {6.2}Améliorations possibles du projet}{9}{}%
+\contentsline {paragraph}{}{9}{}%
+\contentsline {paragraph}{}{9}{}%

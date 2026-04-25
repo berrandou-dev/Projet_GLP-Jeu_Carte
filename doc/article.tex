@@ -1,0 +1,67 @@
+%Définir le format du document: papier, taille de police, type de document, etc.
+%La mise en page du rapport, NE PAS MODIFIER.
+\documentclass[11pt, french]{article}
+
+%%%%%%%%%% Packages externes utilisés %%%%%%%%%%%%%%%%%%%
+\usepackage[french]{babel}
+\selectlanguage{french}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{macro}
+\usepackage{url}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+%\usepackage{algorithm2e}
+
+%La mise en page du rapport, NE PAS MODIFIER.
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ left=20mm,
+ right=20mm,
+ top=20mm,
+ bottom=20mm,
+ }
+
+%%%%%%%%% Le corps du document entre begin et end %%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%Page de garde
+\input{titre.tex}
+
+%Génération automatique de la table des matières, de la liste des figures et de la liste des tableaux
+\tableofcontents
+\listoffigures
+\listoftables
+
+%Une section "remerciements" pourrait être intéressante. C'est une section sans numérof (avec un * )
+
+\newpage
+\section* {Remerciements}
+\addcontentsline{toc}{section}{Remerciements}
+Les auteurs du projet voudraient remercier vivement :
+
+\begin{itemize}
+\item M. Tianxiao LIU, enseignant du module Génie Logiciel, pour ses conseils et son accompagnement tout au long du projet.
+\item CY Cergy Paris Université pour nous avoir fourni les ressources nécessaires à la réalisation de ce travail.
+\item L'équipe pédagogique de la Licence Informatique pour la qualité de la formation.
+\end{itemize}
+
+\input{introduction.tex}
+\input{specification.tex}
+\input{realisation.tex}
+\input{manuel.tex}
+\input{deroulement.tex}
+\input{conclusion.tex}
+
+\newpage
+%Références bibliographiques du document
+\bibliographystyle{plain}
+\bibliography{bibliographies}
+\nocite{*}
+
+\end{document}

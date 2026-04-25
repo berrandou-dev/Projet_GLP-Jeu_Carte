@@ -1,0 +1,27 @@
+\begin{thebibliography}{1}
+
+\bibitem{log4j}
+Apache log4j.
+\newblock \url{https://logging.apache.org/log4j/1.2/}, 2024.
+
+\bibitem{javaswing}
+Java swing documentation.
+\newblock \url{https://docs.oracle.com/javase/8/docs/technotes/guides/swing/},
+  2024.
+
+\bibitem{junit}
+Junit 4.
+\newblock \url{https://junit.org/junit4/}, 2024.
+
+\bibitem{data}
+L.~M. Haas, E.~T. Lin, and M.~A. Roth.
+\newblock Data integration through database federation.
+\newblock {\em IBM Syst. J.}, 41(4):578--596, 2002.
+
+\bibitem{Hennessy:2011:CAF:1999263}
+John~L. Hennessy and David~A. Patterson.
+\newblock {\em Computer Architecture, Fifth Edition: A Quantitative Approach}.
+\newblock Morgan Kaufmann Publishers Inc., San Francisco, CA, USA, 5th edition,
+  2011.
+
+\end{thebibliography}

@@ -1,0 +1,48 @@
+\newpage
+\section{Spécification du projet}
+\label{sec:specification}
+
+\subsection{Notions de base et contraintes du projet}
+\label{sec:spec1}
+
+\subsubsection{Fonctionnement général du logiciel}
+\paragraph{} Le jeu se déroule en tours. Chaque joueur reçoit 5 cartes au début. Le joueur avec la plus petite carte (hors 2 et Joker) commence. À chaque tour, le joueur doit poser une combinaison qui bat la précédente. Si aucun joueur ne peut jouer, le tas est réinitialisé.
+
+\subsubsection{Notions et terminologies de base}
+\paragraph{}
+\begin{itemize}
+\item \textbf{Carte} : 54 cartes (52 standards + 2 Jokers)
+\item \textbf{Combinaison simple} : 1 carte
+\item \textbf{Double} : 2 cartes identiques
+\item \textbf{Série} : 3 cartes consécutives
+\item \textbf{Bombe} : 3 ou 4 cartes identiques
+\item \textbf{Double Joker} : 2 Jokers ensemble (imbattable)
+\end{itemize}
+
+\subsubsection{Contraintes et limitations connues}
+\paragraph{}
+\begin{itemize}
+\item Langage : Java 8
+\item Interface graphique : Swing
+\item Bibliothèques externes : Log4j (logs), JUnit (tests)
+\item La musique ne fonctionne que sous Windows (bug Linux)
+\end{itemize}
+
+\subsection{Fonctionnalités attendues du projet}
+\label{sec:spec2}
+
+\paragraph{Fonctionnalités implémentées}:
+\begin{itemize}
+\item Distribution de 5 cartes à chaque joueur
+\item Détection automatique du joueur qui commence
+\item Pose de combinaisons (simple, double, série, bombe, double joker)
+\item Gestion des cartes spéciales (2 écrase tout, joker polymorphe)
+\item Pioche automatique si aucune carte jouable
+\item Reset du tour quand tous les joueurs passent
+\item Recyclage du deck quand vide
+\item Interface graphique complète (menu, options, jeu, fin de partie)
+\item 3 niveaux de difficulté pour les bots (Facile, Moyen, Difficile)
+\item Système de scores (1 carte = 1 point, bombe = ×2, double joker = ×4)
+\item Logs détaillés (texte et HTML)
+\item Tests unitaires JUnit
+\end{itemize}

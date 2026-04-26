@@ -58,6 +58,10 @@ public class Player {
             hand.add(card);
         }
     }
+    
+    public void addCardToHand(Card card) {
+    	hand.add(card);
+	}
 
     public boolean hasCard(){
         return !hand.isEmpty();

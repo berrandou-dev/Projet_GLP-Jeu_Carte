@@ -49,10 +49,10 @@ public class MainGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(true);
         if (GameStyle.isFullscreen) {
-    setExtendedState(JFrame.MAXIMIZED_BOTH);
-} else {
-    setSize(GameConfig.WINDOW_WIDTH , GameConfig.WINDOW_HEIGHT);
-}
+    		setExtendedState(JFrame.MAXIMIZED_BOTH);
+		} else {
+    		setSize(GameConfig.WINDOW_WIDTH , GameConfig.WINDOW_HEIGHT);
+		}
 
         setLocationRelativeTo(null);
 
@@ -66,7 +66,28 @@ public class MainGUI extends JFrame {
         setVisible(true);
         runRobotTurns();
     }
-
+	
+	// Nouveau constructeur (pour deck personnalisé)
+	public MainGUI(Game game, String title) {
+    	super(title);
+    	this.game = game;
+    	this.humanPlayer = GameBuilder.getHumanPlayer(game);
+    
+    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	setResizable(true);
+    	if (GameStyle.isFullscreen) {
+    	    setExtendedState(JFrame.MAXIMIZED_BOTH);
+    	} else {
+    	    setSize(GameConfig.WINDOW_WIDTH, GameConfig.WINDOW_HEIGHT);
+    	}
+    	setLocationRelativeTo(null);
+    	
+    	logger.info("Interface graphique demarree avec deck personnalise");
+    	MusicPlayer.play();
+    	setupUI();
+    	setVisible(true);
+    	//runRobotTurns();
+	}
     private void runRobotTurns() {
         game.checkResetAtTurnStart();
         String resetMsg = game.consumeResetMessage();

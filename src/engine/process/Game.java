@@ -57,6 +57,42 @@ public class Game {
 		this.currentRound = new Round(1, getCurrentPlayer(), deck);
 		logger.info("Premier joueur : " + getCurrentPlayer().getId());
 	}
+	
+	
+	// Constructeur pour démo (ne distribue pas automatiquement)
+	public Game(List<Player> players, Deck deck, boolean skipInit) {
+    	this.players = new ArrayList<>(players);
+    	this.discardPile = new ArrayList<>();
+    	this.deck = deck;
+    	this.lastCombination = null;
+    	this.turnsInRound = 0;
+
+    	for (Player p : players) {
+    	    if (p.getId().equals("Vous")) {
+    	        this.humanPlayer = p;
+    	        break;
+    	    }
+    	}
+
+    	logger.info("=== NOUVELLE PARTIE DEMARREE (mode demo) ===");
+    	logger.info("Nombre de joueurs : " + players.size());
+
+    	this.currentPlayerIndex = findStartingPlayerIndex();
+
+    	if (this.currentPlayerIndex == -1) {
+        	logger.warn("Aucun joueur de depart trouve, on prend le joueur humain par defaut.");
+        	this.currentPlayerIndex = players.indexOf(humanPlayer);
+    	}
+
+    	this.gameStats = new GameStats();
+    	for (Player p : players) {
+        	this.gameStats.registerPlayer(p.getId());
+    	}
+
+    	this.currentRound = new Round(1, getCurrentPlayer(), deck);
+    	logger.info("Premier joueur : " + getCurrentPlayer().getId());
+	}
+	
 
 	private void initializeHands() {
 		for (Player player : players) {
@@ -215,7 +251,15 @@ public class Game {
 		}
 		return startingIndex;
 	}
-
+	
+	public void setStartingPlayer(Player player) {
+    	int index = players.indexOf(player);
+    	if (index != -1) {
+        	this.currentPlayerIndex = index;
+        	logger.info("Premier joueur force : " + player.getId());
+    	}
+	}
+	
 	private boolean isSmaller(Card c1, Card c2) {
 		int val1 = c1.getValue().ordinal();
 		int val2 = c2.getValue().ordinal();

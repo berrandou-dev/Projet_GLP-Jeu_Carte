@@ -9,7 +9,12 @@ import javax.swing.border.EmptyBorder;
 import config.GameConfig;
 import gui.utils.GameStyle;
 import gui.panels.*;
-import config.GameConfig;
+
+// Ajout des imports pour la démo
+import engine.data.*;
+import engine.process.*;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Écran de configuration de la partie (nb joueurs, difficulté).
@@ -306,16 +311,88 @@ public class OptionGUI extends JFrame {
             }
         });
         btnDemarrer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new MainGUI("Jeu de cartes", nbJoueurs, difficulte);
-                self.dispose();
-            }
-        });
+    		@Override
+    		public void actionPerformed(ActionEvent e) {
+        		// Vérifie si on est en mode démo
+        		boolean isDemoMode = System.getProperty("demo.mode") != null;
+        
+        		if (isDemoMode) {
+            		launchDemoGame();
+        		} else {
+            		new MainGUI("Jeu de cartes", nbJoueurs, difficulte);
+        		}
+        		self.dispose();
+    		}
+		});
 
         btnRow.add(btnRetour);
         btnRow.add(btnDemarrer);
         p.add(btnRow);
         return p;
     }
+    
+    private void launchDemoGame() {
+    // Créer les joueurs
+    List<Player> players = new ArrayList<Player>();
+    Player human = new Player("Vous");
+    players.add(human);
+    players.add(new MediumBot("Robot 1"));
+    players.add(new MediumBot("Robot 2"));
+    
+    // === TOUTES LES CARTES DU JOUEUR ===
+    human.addCardToHand(new Card(Card.Value.THREE, Card.Suit.SPADES));    // 3♠ (carte simple)
+    
+    // Bombe (3 cartes identiques)
+    human.addCardToHand(new Card(Card.Value.SEVEN, Card.Suit.SPADES));    // 7♠
+    human.addCardToHand(new Card(Card.Value.SEVEN, Card.Suit.DIAMONDS));  // 7♦
+    human.addCardToHand(new Card(Card.Value.SEVEN, Card.Suit.CLUBS));     // 7♣
+    
+    // Carte 2
+    human.addCardToHand(new Card(Card.Value.TWO, Card.Suit.CLUBS));       // 2♣
+    
+    // Série (3 cartes consécutives)
+    human.addCardToHand(new Card(Card.Value.FOUR, Card.Suit.HEARTS));     // 4♥
+    human.addCardToHand(new Card(Card.Value.FIVE, Card.Suit.SPADES));     // 5♠
+    human.addCardToHand(new Card(Card.Value.SIX, Card.Suit.CLUBS));       // 6♣
+    
+    // Double Joker
+    human.addCardToHand(new Card(Card.Value.JOKER, Card.Suit.JOKER));     // Joker 1
+    human.addCardToHand(new Card(Card.Value.JOKER, Card.Suit.JOKER));     // Joker 2
+    
+    // === CARTES DES BOTS POUR POUVOIR RÉPONDRE ===
+    
+    // Robot 1
+    Player bot1 = players.get(1);
+    // Pour répondre à la bombe (une bombe plus forte)
+    bot1.addCardToHand(new Card(Card.Value.EIGHT, Card.Suit.HEARTS));
+    bot1.addCardToHand(new Card(Card.Value.EIGHT, Card.Suit.SPADES));
+    bot1.addCardToHand(new Card(Card.Value.EIGHT, Card.Suit.DIAMONDS));   // Bombe de 8
+    // Pour répondre à la série
+    bot1.addCardToHand(new Card(Card.Value.SEVEN, Card.Suit.HEARTS));
+    bot1.addCardToHand(new Card(Card.Value.EIGHT, Card.Suit.CLUBS));
+    bot1.addCardToHand(new Card(Card.Value.NINE, Card.Suit.SPADES));      // Série 7-8-9
+    
+    // Robot 2
+    Player bot2 = players.get(2);
+    // Pour répondre à la bombe (double joker ? non, trop fort)
+    bot2.addCardToHand(new Card(Card.Value.NINE, Card.Suit.HEARTS));
+    bot2.addCardToHand(new Card(Card.Value.NINE, Card.Suit.SPADES));
+    bot2.addCardToHand(new Card(Card.Value.NINE, Card.Suit.DIAMONDS));    // Bombe de 9
+    // Pour répondre à la série
+    bot2.addCardToHand(new Card(Card.Value.TEN, Card.Suit.HEARTS));
+    bot2.addCardToHand(new Card(Card.Value.JACK, Card.Suit.SPADES));
+    bot2.addCardToHand(new Card(Card.Value.QUEEN, Card.Suit.CLUBS));      // Série 10-J-Q
+    
+    // Deck vide
+    Deck deck = new Deck();
+    while (!deck.isEmpty()) {
+        deck.draw();
+    }
+    
+    // Lancer la partie
+    Game game = new Game(players, deck, true);
+    game.setStartingPlayer(human);
+    
+    new MainGUI(game, "Tu n'y peux rien - Démo");
+}
 }

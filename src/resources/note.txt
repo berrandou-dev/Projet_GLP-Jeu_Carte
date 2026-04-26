@@ -1,0 +1,25 @@
+**Règle du Jeu** 
+
+Ce jeu se joue entre 3 et 5 joueurs, chaque joueur piche 5 carte au début
+On pose une carte puis le joueur suivant doit poser une carte avec le numéro qui suit, par exmple: 4 après le 3 (la couleur n'a pas d'importance).
+Si on a pas la possibilité de jouer alors on pioche et on passe son tour.
+On pioche aussi à la fin d'un tour.
+Le jeu se termine quand un joueur s'ai débarrasser de toute ses cartes, ce qui fait de lui le gagnant.
+
+Les differentes combinaisons :
+
+-1 carte constitue une simple.
+-2 cartes du meme nombre constitue une double.
+-3 ou 4 cartes du meme nombre constitue une bombe.
+-3 cartes qui se suivent constitue une serie.
+
+Peux importe la combinaison posé, il faut toujours suivre avec le meme nombre de carte et les numero posé doivent se suivre.
+(par exemple 44 apres 33 ou 6,7,8 apres 3,4,5).
+La plus grosse bombe possible est JOKER JOKER
+
+Les cartes spéciales :
+ 
+-Le 2 est une carte qui écrase le jeu, mais on ne peux que poser une bombe apres celle ci.
+-Le joker peut remplacer n'importe quel carte mais ne peut pas être poser seule.
+
+

@@ -5,6 +5,9 @@ import gui.utils.MusicPlayer;
 import gui.panels.*;
 import engine.data.GameStats;
 import engine.data.GameStats.PlayerStats;
+import gui.utils.ChartManager;
+import org.jfree.chart.ChartPanel;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -45,9 +48,9 @@ public class EndGameGUI extends JFrame {
         this.onMenu       = onMenu;
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(860, 620);
+        setSize(1000, 800); 
         setLocationRelativeTo(null);
-        setResizable(false);
+        setResizable(true);
         MusicPlayer.stop();
         buildUI();
         setVisible(true);
@@ -56,16 +59,22 @@ public class EndGameGUI extends JFrame {
     // ── UI construction ────────────────────────────────────────────────────────
 
     private void buildUI() {
-        JPanel root = GameStyle.feltPanel(new BorderLayout(0, 0));
-        root.setOpaque(true);   // root must be opaque so the gradient shows
-        root.setBorder(new EmptyBorder(24, 28, 20, 28));
+    	JPanel root = GameStyle.feltPanel(new BorderLayout(0, 0));
+    	root.setOpaque(true);
+    	root.setBorder(new EmptyBorder(24, 28, 20, 28));
 
-        root.add(buildHeader(),  BorderLayout.NORTH);
-        root.add(buildCenter(),  BorderLayout.CENTER);
-        root.add(buildFooter(),  BorderLayout.SOUTH);
+    	root.add(buildHeader(), BorderLayout.NORTH);
+    
+    	JPanel centerPanel = new JPanel(new BorderLayout(0, 15));
+    	centerPanel.setOpaque(false);
+    	centerPanel.add(buildCenter(), BorderLayout.CENTER);      // Podium + Tableau
+    	centerPanel.add(buildChartsSection(), BorderLayout.SOUTH); // Graphiques
+    
+    	root.add(centerPanel, BorderLayout.CENTER);
+    	root.add(buildFooter(), BorderLayout.SOUTH);
 
-        setContentPane(root);
-    }
+    	setContentPane(root);
+	}
 
     // ── Header ─────────────────────────────────────────────────────────────────
 
@@ -353,6 +362,34 @@ public class EndGameGUI extends JFrame {
         p.add(btnRow);
         return p;
     }
+    
+    // Chart Graphic	
+    private JPanel buildChartsSection() {
+    if (stats == null || stats.getAllStats().isEmpty()) {
+        JPanel empty = new JPanel();
+        empty.setOpaque(false);
+        empty.add(new JLabel("Statistiques non disponibles"));
+        return empty;
+    }
+    
+    ChartManager cm = new ChartManager(stats);
+    
+    ChartPanel piePanel = new ChartPanel(cm.getScorePieChart());
+    piePanel.setPreferredSize(new Dimension(320, 240));
+    piePanel.setBackground(GameStyle.BG_SURFACE);
+    
+    ChartPanel barPanel = new ChartPanel(cm.getCardsPlayedBarChart());
+    barPanel.setPreferredSize(new Dimension(420, 240));
+    barPanel.setBackground(GameStyle.BG_SURFACE);
+    
+    JPanel panel = new JPanel(new GridLayout(1, 2, 15, 0));
+    panel.setOpaque(false);
+    panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    panel.add(piePanel);
+    panel.add(barPanel);
+    
+    return panel;
+}
 
     // ── Helpers ────────────────────────────────────────────────────────────────
 

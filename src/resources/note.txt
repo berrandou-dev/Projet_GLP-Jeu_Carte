@@ -1,25 +1,107 @@
-**Règle du Jeu** 
-
-Ce jeu se joue entre 3 et 5 joueurs, chaque joueur piche 5 carte au début
-On pose une carte puis le joueur suivant doit poser une carte avec le numéro qui suit, par exmple: 4 après le 3 (la couleur n'a pas d'importance).
-Si on a pas la possibilité de jouer alors on pioche et on passe son tour.
-On pioche aussi à la fin d'un tour.
-Le jeu se termine quand un joueur s'ai débarrasser de toute ses cartes, ce qui fait de lui le gagnant.
-
-Les differentes combinaisons :
-
--1 carte constitue une simple.
--2 cartes du meme nombre constitue une double.
--3 ou 4 cartes du meme nombre constitue une bombe.
--3 cartes qui se suivent constitue une serie.
-
-Peux importe la combinaison posé, il faut toujours suivre avec le meme nombre de carte et les numero posé doivent se suivre.
-(par exemple 44 apres 33 ou 6,7,8 apres 3,4,5).
-La plus grosse bombe possible est JOKER JOKER
-
-Les cartes spéciales :
- 
--Le 2 est une carte qui écrase le jeu, mais on ne peux que poser une bombe apres celle ci.
--Le joker peut remplacer n'importe quel carte mais ne peut pas être poser seule.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                    RÈGLES DU JEU
+                 "TU N'Y PEUX RIEN"
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
+1. PRINCIPE GÉNÉRAL
+   Le but du jeu est d'être le premier joueur à se débarrasser
+   de toutes ses cartes.
+
+
+2. NOMBRE DE JOUEURS
+   De 3 à 5 joueurs (1 humain + des bots).
+
+
+3. DÉROULEMENT D'UNE PARTIE
+
+   3.1 Distribution initiale
+        Chaque joueur reçoit 5 cartes au début de la partie.
+        Les cartes restantes forment la pioche.
+
+   3.2 Premier joueur
+        Le joueur qui possède la carte la plus faible (hors 2 et Joker)
+        commence la partie.
+        Ordre des couleurs : Carreau (♦) < Trèfle (♣) < Cœur (♥) < Pique (♠)
+
+   3.3 Déroulement d'un tour
+        - Le joueur pose une ou plusieurs cartes formant une combinaison
+          valable (voir section 4).
+        - Le joueur suivant doit poser une combinaison du MÊME TYPE
+          avec des cartes de valeur STRICTEMENT SUPÉRIEURE.
+        - Si un joueur ne peut pas jouer, il pioche UNE carte et passe son tour.
+        - À la fin de chaque round, chaque joueur pioche une carte.
+
+   3.4 Cas particulier - La carte 2
+        - La carte 2 écrase n'importe quelle carte simple.
+        - Après un 2, seule une BOMBE (ou Double Joker) peut être jouée.
+
+   3.5 Reset du tour
+        Si tous les joueurs passent sans jouer (sauf le dernier à avoir joué),
+        le tas est réinitialisé : toutes les cartes sont mélangées et
+        replacées dans la pioche. Un nouveau round commence.
+
+   3.6 Fin de la partie
+        La partie se termine immédiatement quand un joueur pose sa dernière
+        carte. Ce joueur est déclaré vainqueur.
+
+
+4. COMBINAISONS VALABLES
+
+   - SIMPLE : 1 carte (exemple : 7♥)
+
+   - DOUBLE : 2 cartes de même valeur (exemple : Roi♠ + Roi♦)
+
+   - SÉRIE : 3 cartes ou plus qui se suivent (exemple : 4♥, 5♠, 6♣)
+
+   - BOMBE : 3 ou 4 cartes de même valeur (exemple : 7♥, 7♠, 7♦)
+
+   - DOUBLE JOKER : 2 Jokers (la combinaison la plus forte)
+
+   Règles de succession :
+   - Le type de combinaison doit être IDENTIQUE à la précédente
+   - Le nombre de cartes doit être le MÊME
+   - La valeur doit être STRICTEMENT SUPÉRIEURE à la précédente
+
+
+5. HIÉRARCHIE DES FORCES (de la plus forte à la plus faible)
+
+   1. DOUBLE JOKER    - bat tout
+   2. BOMBE          - bat tout sauf Double Joker
+   3. Carte 2        - bat toute Simple (mais pas les Bombes)
+   4. Autres valeurs - ordre normal (3 < 4 < 5 < ... < Roi < As)
+
+
+6. LES JOKERS
+
+   - Un Joker remplace n'importe quelle carte manquante.
+   - Exemples :
+     * 7♥ + JOKER = Double (7♥ + 7♣)
+     * 4♥, 5♠, JOKER = Série (4, 5, 6)
+     * JOKER + JOKER = Double Joker
+
+   - ATTENTION : Un Joker ne peut PAS être joué seul !
+
+
+7. SYSTÈME DE SCORE (fin de partie)
+
+   - SIMPLE      : 1 point par carte
+   - DOUBLE      : 2 points (2 cartes)
+   - SÉRIE       : 3 points minimum (selon le nombre de cartes)
+   - BOMBE       : nombre de cartes x 2
+   - DOUBLE JOKER: nombre de cartes x 4
+
+   Exemples :
+   - Une Bombe de 3 cartes rapporte 6 points
+   - Un Double Joker rapporte 8 points
+
+
+8. BOTS (difficultés)
+
+   - FACILE : Joue au hasard, passe parfois volontairement
+   - NORMAL : Joue la combinaison la plus faible possible (hors Bombe)
+   - DIFFICILE : Joue stratégiquement, ouvre avec des combinaisons fortes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+                     BON JEU ! 🎲
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

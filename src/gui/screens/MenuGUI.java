@@ -6,6 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
 
 import config.GameConfig;
 import gui.utils.GameStyle;
@@ -38,21 +40,20 @@ public class MenuGUI extends JFrame {
     
     private String chargerRegles() {
         try {
-            java.io.InputStream is = getClass().getResourceAsStream("/resources/note.txt");
-
-            if (is == null) {
-                return "Fichier de règles introuvable.";
+            java.io.File file = new java.io.File("src/resources/note.txt");
+            
+            if (!file.exists()) {
+                return "Fichier non trouvé: " + file.getAbsolutePath();
             }
-
-            java.util.Scanner scanner = new java.util.Scanner(is, "UTF-8");
+            
+            java.util.Scanner scanner = new java.util.Scanner(file, "UTF-8");
             scanner.useDelimiter("\\A");
-
             String texte = scanner.hasNext() ? scanner.next() : "Fichier de règles vide.";
             scanner.close();
-
             return texte;
+            
         } catch (Exception e) {
-            return "Erreur lors du chargement des règles.";
+            return "Erreur lors du chargement des règles: " + e.getMessage();
         }
     }
     private void buildUI() {
@@ -134,20 +135,28 @@ public class MenuGUI extends JFrame {
         
         //Regles du jeu
         
-        JButton btnRules = GameStyle.purpleButton(
-        		"Règles");
-        btnRules.setAlignmentX(CENTER_ALIGNMENT);
-        btnRules.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(
-                    MenuGUI.this,
-                    chargerRegles(),
-                    "Règles",
-                    JOptionPane.INFORMATION_MESSAGE
-                );
-            }
-        });
+		JButton btnRules = GameStyle.purpleButton("Règles");
+		btnRules.setAlignmentX(CENTER_ALIGNMENT);
+		btnRules.addActionListener(new ActionListener() {
+    		@Override
+    		public void actionPerformed(ActionEvent e) {
+       			String texte = chargerRegles();
+        
+        		// Créer une zone de texte avec défilement
+        		JTextArea textArea = new JTextArea(texte);
+        		textArea.setEditable(false);
+        		textArea.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        		textArea.setBackground(new Color(0, 40, 5));
+        		textArea.setForeground(new Color(230, 255, 230));
+        		textArea.setCaretPosition(0);
+        		
+        		JScrollPane scrollPane = new JScrollPane(textArea);
+        		scrollPane.setPreferredSize(new Dimension(600, 500));
+        		
+        		JOptionPane.showMessageDialog(MenuGUI.this, scrollPane, 
+        	    "Règles du jeu", JOptionPane.INFORMATION_MESSAGE);
+    		}
+		});
 
         center.add(btnNewGame);
         center.add(Box.createVerticalStrut(18));

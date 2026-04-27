@@ -8,6 +8,9 @@ import java.util.List;
 import javax.swing.*;
 import gui.utils.CardPaintStrategy;
 
+/**
+ * Interactive card component: lift on hover, selection on click.
+ */
 public class CardPanel extends JPanel {
     private Card card;
     private boolean lifted = false;

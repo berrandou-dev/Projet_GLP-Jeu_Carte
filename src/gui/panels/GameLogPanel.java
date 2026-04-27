@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Panneau d'affichage de l'historique des actions dans la GUI.
- * Le logger Log4j ecrit dans les fichiers (game-log.txt / game-log.html).
- * Ce panneau affiche les messages directement dans l'interface graphique.
+ * Side panel displaying game action history (last 20 messages).
  */
 public class GameLogPanel extends JPanel {
 
@@ -42,11 +40,7 @@ public class GameLogPanel extends JPanel {
 		scrollPane.setBorder(null);
 		add(scrollPane, BorderLayout.CENTER);
 	}
-
-	/**
-	 * Ajoute un message dans le panneau d'historique GUI.
-	 * A appeler depuis MainGUI apres chaque action de jeu.
-	 */
+	
 	public void addLog(String message) {
     	logs.add(message);  //
     	while (logs.size() > MAX_LOGS) {

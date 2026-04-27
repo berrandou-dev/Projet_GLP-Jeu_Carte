@@ -7,6 +7,10 @@ import config.GameConfig;
 import log.LoggerUtility;
 import org.apache.log4j.Logger;
 
+
+/**
+ * Factory for creating Game instances with bots at different difficulty levels.
+ */
 public class GameBuilder {
 
 	private static final Logger logger = LoggerUtility.getLogger(GameBuilder.class, "html");

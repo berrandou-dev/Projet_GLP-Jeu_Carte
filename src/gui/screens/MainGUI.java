@@ -24,6 +24,10 @@ import log.LoggerUtility;
 import gui.panels.*;
 import gui.utils.*;
 
+
+/**
+ * Main game window. Handles GUI layout, user interactions, and bot turn automation.
+ */
 public class MainGUI extends JFrame {
 
     private static final Logger logger = LoggerUtility.getLogger(MainGUI.class, "html");

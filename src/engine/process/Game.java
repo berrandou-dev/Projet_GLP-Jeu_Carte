@@ -6,6 +6,10 @@ import engine.data.*;
 import log.LoggerUtility;
 import org.apache.log4j.Logger;
 
+
+/**
+ * Main game logic: turn management, drawing, reset, recycling.
+ */
 public class Game {
 
 	private static final Logger logger = LoggerUtility.getLogger(Game.class, "html");

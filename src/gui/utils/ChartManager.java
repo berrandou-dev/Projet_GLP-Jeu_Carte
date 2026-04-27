@@ -10,6 +10,12 @@ import org.jfree.data.general.DefaultPieDataset;
 import java.awt.*;
 import java.util.Map;
 
+
+/**
+ * Generates jFreeChart graphs for end-game statistics:
+ * - Pie chart: score distribution
+ * - Bar chart: cards played, bombs, jokers per player
+ */
 public class ChartManager {
 
     private final GameStats stats;

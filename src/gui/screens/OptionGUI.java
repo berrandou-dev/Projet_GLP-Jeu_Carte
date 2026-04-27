@@ -10,14 +10,14 @@ import config.GameConfig;
 import gui.utils.GameStyle;
 import gui.panels.*;
 
-// Ajout des imports pour la démo
+// Import for the demo
 import engine.data.*;
 import engine.process.*;
 import java.util.List;
 import java.util.ArrayList;
 
 /**
- * Écran de configuration de la partie (nb joueurs, difficulté).
+ * Game configuration screen: number of players (3-5) and bot difficulty.
  */
 public class OptionGUI extends JFrame {
 
@@ -109,7 +109,6 @@ public class OptionGUI extends JFrame {
 
     boolean fullscreen = GameStyle.isFullscreen;
 
-    // Ratios différents selon mode
     double btnRatioW   = fullscreen ? 0.11 : 0.14;
     double btnRatioH   = fullscreen ? 0.05 : 0.07;
     double fontRatio   = fullscreen ? 1.1  : 0.9;

@@ -5,6 +5,9 @@ import java.awt.Graphics;
 import java.awt.Font;
 import config.GameConfig;
 
+/**
+ * Paints a single card: background, border, value, suit.
+ */
 public class CardPaintStrategy {
 
     private static final int WIDTH = GameConfig.CARD_WIDTH;

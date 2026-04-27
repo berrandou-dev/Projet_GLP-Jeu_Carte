@@ -12,6 +12,9 @@ import java.net.URL;
 import javax.imageio.ImageIO;
 import gui.utils.GameStyle;
 
+/**
+ * Panel displaying a bot player: avatar, card count badge, and gold halo for current turn.
+ */
 public class BotsPanel extends JPanel {
 
     private static final String ROBOT_IMAGE_PATH = "/resources/petitbonhommeglp.jpeg";

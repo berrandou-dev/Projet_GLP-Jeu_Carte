@@ -12,6 +12,10 @@ import gui.utils.GameStyle;
 import gui.utils.MusicPlayer;
 import gui.screens.MainGUI;
 
+/**
+ * Top information bar: round number, current player, last combination,
+ * draw button, and music mute button.
+ */
 public class GameInfoBar extends JPanel {
 
     private Game    game;
@@ -77,20 +81,23 @@ public class GameInfoBar extends JPanel {
 
         // Bouton Mute — emojiFont pour afficher 
         btnMute = GameStyle.blueButton("ON");
-    	btnMute.setFont(new Font(GameConfig.FONT_NAME, Font.BOLD, 12));
-    	btnMute.setForeground(Color.WHITE);
-    	btnMute.setPreferredSize(new Dimension(70, 48));
-    	btnMute.addActionListener(new ActionListener() {
-        	@Override
-        	public void actionPerformed(ActionEvent e) {
-            	MusicPlayer.togglePause();
-            	if (MusicPlayer.isPlaying()) {
-                	btnMute.setText("ON");
-            	} else {
-                	btnMute.setText("MUTE");
-            	}
-        	}
-    	});
+		btnMute.setFont(new Font(GameConfig.FONT_NAME, Font.BOLD, 12));
+		btnMute.setForeground(Color.WHITE);
+		btnMute.setPreferredSize(new Dimension(70, 48));
+		btnMute.addActionListener(new ActionListener() {
+    		@Override
+    		public void actionPerformed(ActionEvent e) {
+        		if (btnMute.getText().equals("ON")) {
+            		btnMute.setText("MUTE");
+            		btnMute.setBackground(new Color(100, 70, 20));
+            		MusicPlayer.stop();
+        		} else {
+            		btnMute.setText("ON");
+            		btnMute.setBackground(GameStyle.ACCENT_BLUE);
+            		MusicPlayer.play();
+        		}
+    		}
+		});
 
         controlPanel.add(drawButton);
         controlPanel.add(btnMute);

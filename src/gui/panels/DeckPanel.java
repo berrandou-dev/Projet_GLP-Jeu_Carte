@@ -5,7 +5,9 @@ import javax.swing.*;
 import engine.data.*;
 import config.GameConfig;
 
-
+/**
+ * Visual representation of the remaining deck with card count.
+ */
 public class DeckPanel extends JPanel {
 
     private Deck deck;

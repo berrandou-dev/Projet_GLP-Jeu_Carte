@@ -16,15 +16,8 @@ import java.util.*;
 import java.util.List;
 
 /**
- * End-of-game screen showing statistics and scores for all players.
- *
- * Score system:
- *   - 1 carte jouée  = 1 jeton
- *   - BOMB           = ×2  (nombre de cartes × 2)
- *   - DOUBLE_JOKER   = ×4  (nombre de cartes × 4)
- *
- * Visual style: shared GameStyle (casino felt — green / gold / dark).
- * Compatible with Java 8.
+ * End-of-game screen displaying scores, podium, statistics table,
+ * and jFreeChart graphs (pie and bar charts).
  */
 public class EndGameGUI extends JFrame {
 
@@ -33,12 +26,7 @@ public class EndGameGUI extends JFrame {
     private final Runnable  onReplay;
     private final Runnable  onMenu;
 
-    /**
-     * @param stats        collected game statistics
-     * @param totalPlayers number of players in the game
-     * @param onReplay     callback for "Rejouer"
-     * @param onMenu       callback for "Menu Principal"
-     */
+
     public EndGameGUI(GameStats stats, int totalPlayers,
                       Runnable onReplay, Runnable onMenu) {
         super("Fin de Partie – Résultats");

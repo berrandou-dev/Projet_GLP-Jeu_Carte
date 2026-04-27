@@ -19,7 +19,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 /**
- * Menu principal du jeu.
+ * Main menu with options: New Game, Fullscreen, Rules, Quit.
  */
 public class MenuGUI extends JFrame {
 

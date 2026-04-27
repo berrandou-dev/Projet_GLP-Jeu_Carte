@@ -1,54 +1,79 @@
 \babel@toc {french}{}\relax 
 \babel@toc {french}{}\relax 
-\contentsline {section}{Remerciements}{2}{}%
-\contentsline {section}{\numberline {1}Introduction}{3}{}%
-\contentsline {subsection}{\numberline {1.1}Contexte du projet}{3}{}%
-\contentsline {paragraph}{}{3}{}%
-\contentsline {subsection}{\numberline {1.2}Objectif du projet}{3}{}%
-\contentsline {paragraph}{}{3}{}%
-\contentsline {subsection}{\numberline {1.3}Organisation du rapport}{3}{}%
-\contentsline {paragraph}{}{3}{}%
-\contentsline {section}{\numberline {2}Spécification du projet}{4}{}%
-\contentsline {subsection}{\numberline {2.1}Notions de base et contraintes du projet}{4}{}%
-\contentsline {subsubsection}{\numberline {2.1.1}Fonctionnement général du logiciel}{4}{}%
+\contentsline {section}{Remerciements}{3}{}%
+\contentsline {section}{\numberline {1}Introduction}{4}{}%
+\contentsline {subsection}{\numberline {1.1}Contexte du projet}{4}{}%
 \contentsline {paragraph}{}{4}{}%
-\contentsline {subsubsection}{\numberline {2.1.2}Notions et terminologies de base}{4}{}%
 \contentsline {paragraph}{}{4}{}%
-\contentsline {subsubsection}{\numberline {2.1.3}Contraintes et limitations connues}{4}{}%
+\contentsline {subsection}{\numberline {1.2}État de l'art des jeux de cartes}{4}{}%
 \contentsline {paragraph}{}{4}{}%
-\contentsline {subsection}{\numberline {2.2}Fonctionnalités attendues du projet}{4}{}%
-\contentsline {paragraph}{Fonctionnalités implémentées}{4}{}%
-\contentsline {section}{\numberline {3}Conception et mise en œuvre}{5}{}%
-\contentsline {subsection}{\numberline {3.1}Architecture globale du logiciel}{5}{}%
-\contentsline {paragraph}{}{5}{}%
-\contentsline {subsection}{\numberline {3.2}Classes de données (engine.data)}{5}{}%
-\contentsline {paragraph}{}{5}{}%
-\contentsline {subsection}{\numberline {3.3}Traitements (engine.process)}{5}{}%
-\contentsline {paragraph}{}{5}{}%
-\contentsline {subsection}{\numberline {3.4}IHM Graphique (gui)}{5}{}%
-\contentsline {paragraph}{}{5}{}%
-\contentsline {subsection}{\numberline {3.5}Patterns de conception utilisés}{5}{}%
-\contentsline {paragraph}{}{5}{}%
-\contentsline {section}{\numberline {4}Manuel utilisateur}{6}{}%
-\contentsline {subsection}{\numberline {4.1}Lancement du jeu}{6}{}%
-\contentsline {paragraph}{}{6}{}%
-\contentsline {subsection}{\numberline {4.2}Configuration de la partie}{6}{}%
-\contentsline {paragraph}{}{6}{}%
-\contentsline {subsection}{\numberline {4.3}Déroulement d'une partie}{7}{}%
-\contentsline {paragraph}{}{7}{}%
-\contentsline {subsection}{\numberline {4.4}Fin de partie}{7}{}%
-\contentsline {paragraph}{}{7}{}%
-\contentsline {section}{\numberline {5}Déroulement du projet}{8}{}%
-\contentsline {subsection}{\numberline {5.1}Réalisation du projet par étapes}{8}{}%
-\contentsline {paragraph}{}{8}{}%
-\contentsline {subsection}{\numberline {5.2}Répartition des tâches, communication et intégration}{8}{}%
-\contentsline {paragraph}{}{8}{}%
-\contentsline {paragraph}{}{8}{}%
-\contentsline {paragraph}{}{8}{}%
-\contentsline {section}{\numberline {6}Conclusion et perspectives}{9}{}%
-\contentsline {subsection}{\numberline {6.1}Résumé du travail réalisé}{9}{}%
-\contentsline {paragraph}{}{9}{}%
-\contentsline {paragraph}{}{9}{}%
-\contentsline {subsection}{\numberline {6.2}Améliorations possibles du projet}{9}{}%
-\contentsline {paragraph}{}{9}{}%
-\contentsline {paragraph}{}{9}{}%
+\contentsline {paragraph}{}{4}{}%
+\contentsline {subsection}{\numberline {1.3}Objectif du projet}{4}{}%
+\contentsline {paragraph}{}{4}{}%
+\contentsline {subsection}{\numberline {1.4}Organisation du rapport}{4}{}%
+\contentsline {paragraph}{}{4}{}%
+\contentsline {section}{\numberline {2}Spécification du projet}{5}{}%
+\contentsline {subsection}{\numberline {2.1}Notions de base et contraintes du projet}{5}{}%
+\contentsline {paragraph}{Fonctionnement général du logiciel}{5}{}%
+\contentsline {paragraph}{Déroulement détaillé d'une partie}{5}{}%
+\contentsline {paragraph}{Notions et terminologies de base}{5}{}%
+\contentsline {paragraph}{Hiérarchie des combinaisons}{5}{}%
+\contentsline {paragraph}{Contraintes et limitations connues}{5}{}%
+\contentsline {subsection}{\numberline {2.2}Fonctionnalités attendues du projet}{5}{}%
+\contentsline {paragraph}{Fonctionnalités implémentées}{5}{}%
+\contentsline {paragraph}{Fonctionnalités non implémentées (hors périmètre)}{5}{}%
+\contentsline {section}{\numberline {3}Conception du logiciel}{7}{}%
+\contentsline {subsection}{\numberline {3.1}Architecture globale}{7}{}%
+\contentsline {subsection}{\numberline {3.2}Patterns de conception utilisés}{7}{}%
+\contentsline {section}{\numberline {4}Mise en œuvre}{8}{}%
+\contentsline {subsection}{\numberline {4.1}Classes de données (engine.data)}{8}{}%
+\contentsline {subsection}{\numberline {4.2}Traitements (engine.process)}{8}{}%
+\contentsline {paragraph}{Algorithme de détection des combinaisons}{8}{}%
+\contentsline {paragraph}{Algorithme de comparaison des combinaisons}{8}{}%
+\contentsline {subsection}{\numberline {4.3}Intelligence artificielle des bots}{8}{}%
+\contentsline {subsection}{\numberline {4.4}Interface graphique (gui)}{9}{}%
+\contentsline {paragraph}{Gestion du plein écran}{9}{}%
+\contentsline {paragraph}{Musique de fond}{9}{}%
+\contentsline {paragraph}{Graphiques statistiques}{9}{}%
+\contentsline {paragraph}{Bilan de la mise en œuvre}{9}{}%
+\contentsline {section}{\numberline {5}Manuel utilisateur}{10}{}%
+\contentsline {subsection}{\numberline {5.1}Lancement du jeu}{10}{}%
+\contentsline {paragraph}{}{10}{}%
+\contentsline {subsection}{\numberline {5.2}Configuration de la partie}{10}{}%
+\contentsline {paragraph}{}{10}{}%
+\contentsline {subsection}{\numberline {5.3}Déroulement d'une partie}{10}{}%
+\contentsline {paragraph}{}{10}{}%
+\contentsline {subsection}{\numberline {5.4}Fin de partie}{10}{}%
+\contentsline {paragraph}{}{10}{}%
+\contentsline {section}{\numberline {6}Déroulement du projet}{11}{}%
+\contentsline {subsection}{\numberline {6.1}Réalisation du projet par étapes}{11}{}%
+\contentsline {paragraph}{}{11}{}%
+\contentsline {paragraph}{Première période (février - début mars)}{11}{}%
+\contentsline {paragraph}{Deuxième période (mars)}{12}{}%
+\contentsline {paragraph}{Troisième période (fin mars - avril)}{12}{}%
+\contentsline {paragraph}{Quatrième période (avril)}{12}{}%
+\contentsline {subsection}{\numberline {6.2}Répartition des tâches, communication et intégration}{12}{}%
+\contentsline {paragraph}{}{12}{}%
+\contentsline {paragraph}{}{12}{}%
+\contentsline {paragraph}{}{12}{}%
+\contentsline {paragraph}{Détail des principaux défis techniques}{13}{}%
+\contentsline {section}{\numberline {7}Conclusion et perspectives}{14}{}%
+\contentsline {subsection}{\numberline {7.1}Résumé du travail réalisé}{14}{}%
+\contentsline {paragraph}{}{14}{}%
+\contentsline {paragraph}{}{14}{}%
+\contentsline {subsection}{\numberline {7.2}Tests et validation}{14}{}%
+\contentsline {paragraph}{}{14}{}%
+\contentsline {paragraph}{}{14}{}%
+\contentsline {subsection}{\numberline {7.3}Améliorations possibles du projet}{14}{}%
+\contentsline {paragraph}{}{14}{}%
+\contentsline {paragraph}{}{14}{}%
+\contentsline {section}{\numberline {8}Annexes}{15}{}%
+\contentsline {subsection}{\numberline {8.1}Guide d'installation rapide}{15}{}%
+\contentsline {paragraph}{Prérequis :}{15}{}%
+\contentsline {paragraph}{Import du projet dans Eclipse :}{15}{}%
+\contentsline {paragraph}{Ajout des bibliothèques externes :}{15}{}%
+\contentsline {paragraph}{Lancement du jeu :}{15}{}%
+\contentsline {subsection}{\numberline {8.2}Structure des packages du projet}{15}{}%
+\contentsline {paragraph}{}{15}{}%
+\contentsline {subsection}{\numberline {8.3}Principales classes du projet}{16}{}%
+\contentsline {paragraph}{}{16}{}%

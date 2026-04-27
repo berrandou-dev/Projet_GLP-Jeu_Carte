@@ -3,31 +3,85 @@
 \label{sec:deroulement}
 
 \subsection{Réalisation du projet par étapes}
-\paragraph{} Le projet a été réalisé selon les étapes suivantes :
+\paragraph{} Le projet a été développé sur une période d'environ deux mois et demi, avec un total de plus de 48 commits enregistrés sur le dépôt GitHub. L'historique des versions reflète l'évolution progressive du logiciel, depuis les premières maquettes jusqu'à la version finale fonctionnelle.
 
-\begin{enumerate}
-\item \textbf{Semaine 1-2} : Mise en place des classes de base (Card, Deck, Player)
-\item \textbf{Semaine 3-4} : Implémentation des combinaisons (Combination, determineType, canBeat)
-\item \textbf{Semaine 5-6} : Développement des bots et de la logique de jeu (Game)
-\item \textbf{Semaine 7-8} : Interface graphique (Swing) et refonte du layout
-\item \textbf{Semaine 9-10} : Tests unitaires (JUnit) et corrections de bugs
-\item \textbf{Semaine 11-12} : Rédaction du rapport et préparation de la livraison
-\end{enumerate}
+\paragraph{Première période (février - début mars)}
+Les premiers travaux concernent la création des fenêtres et des composants graphiques. La classe \texttt{Card} est introduite le 24 février, suivie des fenêtres d'accueil et d'options. La gestion des symboles unicode pour les couleurs des cartes est mise en place. Des travaux préliminaires sur l'animation des cartes sont également menés durant cette période.
+
+\paragraph{Deuxième période (mars)}
+Le mois de mars marque une avancée majeure avec l'ajout des classes fondamentales : \texttt{Combination}, \texttt{CombinationType}, \texttt{Round} et \texttt{Player}. La structure du projet est réorganisée et la classe \texttt{GameBuilder} est créée pour faciliter l'initialisation des parties. La gestion des logs est également intégrée.
+
+\paragraph{Troisième période (fin mars - avril)}
+Les trois niveaux de bots (Facile, Moyen, Difficile) sont ajoutés. La logique centrale du jeu (\texttt{Game}) est finalisée avec la gestion des tours, de la pioche, du reset du tas et du recyclage du deck. Les règles spécifiques (carte 2, joker polymorphe) sont progressivement intégrées et corrigées.
+
+\paragraph{Quatrième période (avril)}
+Les derniers développements concernent l'interface graphique : ajout des graphiques statistiques avec jFreeChart, création d'un panneau d'affichage pour les bots (\texttt{BotsPanel}), gestion du plein écran persistant et amélioration de l'accessibilité. La musique de fond est ajoutée via la classe \texttt{MusicPlayer}. Enfin, la fenêtre d'affichage des règles est corrigée pour permettre le défilement du texte.
 
 \subsection{Répartition des tâches, communication et intégration}
 \paragraph{} La répartition des tâches s'est organisée comme suit :
 
 \begin{itemize}
-\item \textbf{Laiza KHODJA} : Interface graphique (GameStyle, MusicPlayer, EndGameGUI, BotsPanel)
-\item \textbf{Nesrine BOUATMANE} : Classes de données (Card, Deck, Player, GameStats, tests unitaires)
-\item \textbf{Nassim BERRANDOU} : Logique métier (Game, Combination, bots, correction bugs)
+\item \textbf{Laiza KHODJA} : Interface graphique (fenêtres MenuGUI, OptionGUI, MainGUI, EndGameGUI), style visuel (GameStyle), gestion des règles, intégration des images et de la musique (MusicPlayer)
+\item \textbf{Nesrine BOUATMANE} : Classes de données (Card, Deck, Player, GameStats), tests unitaires JUnit, animations des cartes, affichage des bots (BotsPanel)
+\item \textbf{Nassim BERRANDOU} : Logique métier (Game, Combination, Round), intelligence artificielle des bots (EasyBot, MediumBot, HardBot), gestion des logs (Log4j), intégration des graphiques statistiques (jFreeChart, ChartManager), correction des bugs et finalisation générale
 \end{itemize}
 
-\paragraph{} La communication s'est faite via Discord et GitHub. Le versionnement Git a permis une intégration continue des différentes parties.
+\paragraph{} La communication s'est faite via WhatsApp et GitHub. Le versionnement Git a permis une intégration continue des différentes parties. Le tableau \ref{tab:commits} présente un extrait de l'historique des commits.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Date} & \textbf{Auteur} & \textbf{Message} \\
+\hline
+26/04/2026 & Nassim & Correction fenêtre Règles \\
+\hline
+26/04/2026 & Laiza & Ajout fichier règles \\
+\hline
+26/04/2026 & Nassim & Ajout graphiques jFreeChart + ChartManager \\
+\hline
+26/04/2026 & Nassim & Création DemoLauncher \\
+\hline
+25/04/2026 & Laiza & Ajout bouton Règles \\
+\hline
+24/04/2026 & Nesrine & Ajout BotsPanel + correction OptionGUI \\
+\hline
+22/04/2026 & Nesrine & Ajout MusicPlayer + GameStyle \\
+\hline
+22/04/2026 & Nassim & Plein écran persistant + boutons adaptatifs \\
+\hline
+21/04/2026 & Nassim & Finalisation logique du jeu \\
+\hline
+21/03/2026 & Nesrine & Ajout des 3 niveaux de bots \\
+\hline
+20/03/2026 & Nassim & Restructuration + GameBuilder \\
+\hline
+12/03/2026 & Nesrine & Ajout Combination + CombinationType \\
+\hline
+12/03/2026 & Nesrine & Ajout Player \\
+\hline
+12/03/2026 & Laiza & Ajout Round \\
+\hline
+24/02/2026 & Nesrine & Ajout classe Card \\
+\hline
+\end{tabular}
+\caption{Extrait de l'historique des commits}
+\label{tab:commits}
+\end{table}
 
 \paragraph{} Les principaux défis rencontrés ont été :
 \begin{itemize}
 \item La gestion du reset du tas et du recyclage des cartes
-\item La compatibilité de la musique entre Linux et Windows
 \item La synchronisation des tours entre le joueur humain et les bots
 \end{itemize}
+
+\paragraph{Détail des principaux défis techniques}
+
+\subparagraph*{Reset du tas et recyclage des cartes}
+La règle du jeu stipule que lorsque tous les joueurs passent leur tour (sauf le dernier ayant joué), le tas est réinitialisé. De plus, lorsque la pioche est vide, les cartes de la défausse doivent être recyclées. Cette mécanique a nécessité une gestion fine des états : conservation de la dernière combinaison posée, vidage de la défausse, mélange et transfert vers la pioche. La solution retenue utilise une variable \texttt{passCount} pour compter les passes consécutives et déclencher le reset automatiquement.
+
+\subparagraph*{Synchronisation des tours}
+L'interface Swing tourne sur le thread AWT (Event Dispatch Thread). Les bots doivent jouer sans bloquer l'interface. La solution a été d'utiliser un thread séparé avec un délai d'une seconde (\texttt{Thread.sleep(900)}), couplé à \texttt{SwingUtilities.invokeLater()} pour rafraîchir l'affichage.
+
+\subparagraph*{Détection des combinaisons avec Jokers}
+Un Joker peut remplacer n'importe quelle carte. Par exemple, une série {4, JOKER, 6} doit être reconnue comme valide (le Joker remplace le 5). L'algorithme actuel compte les Jokers et vérifie s'ils peuvent combler les écarts entre les cartes normales. Cette logique a demandé plusieurs itérations pour être pleinement fonctionnelle.

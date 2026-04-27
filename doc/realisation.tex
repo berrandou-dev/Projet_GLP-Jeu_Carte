@@ -1,43 +1,16 @@
 \newpage
-\section{Conception et mise en œuvre}
-\label{sec:impl}
+\section{Conception du logiciel}
+\label{sec:conception}
 
-\subsection{Architecture globale du logiciel}
-\paragraph{} L'architecture du projet suit le modèle MVC (Modèle-Vue-Contrôleur) :
-
+\subsection{Architecture globale}
+\label{sec:archi}
+L'architecture du projet suit le modèle MVC (Modèle-Vue-Contrôleur) :
 \begin{itemize}
 \item \textbf{Modèle (engine.data)} : Classes Card, Deck, Player, GameStats
 \item \textbf{Contrôleur (engine.process)} : Classes Game, Combination, BotPlayer
 \item \textbf{Vue (gui)} : Classes MainGUI, MenuGUI, OptionGUI, EndGameGUI
 \end{itemize}
-
-\begin{figure}[h!]
-\centering
-%\includegraphics[width=12cm]{images/architecture.png}
-\caption{Architecture du logiciel}
-\label{fig:architecture}
-\end{figure}
-
-\subsection{Classes de données (engine.data)}
-\paragraph{}
-\begin{itemize}
-\item \textbf{Card} : Représente une carte avec sa valeur et sa couleur. Implémente equals() et hashCode().
-\item \textbf{Deck} : Gère le paquet de 54 cartes, mélange (shuffle) et pioche (draw).
-\item \textbf{Player} : Gère la main du joueur, la pioche et la pose de combinaisons.
-\item \textbf{CombinationType} : Énumération des types (SIMPLE, DOUBLE, SERIES, BOMB, DOUBLE\_JOKER, INVALID).
-\item \textbf{GameStats} : Enregistre les statistiques et calcule les scores.
-\end{itemize}
-
-\subsection{Traitements (engine.process)}
-\paragraph{}
-\begin{itemize}
-\item \textbf{Combination} : Détection automatique du type avec determineType(), comparaison avec canBeat().
-\item \textbf{Game} : Logique principale (gestion des tours, pioche, reset, recyclage).
-\item \textbf{BotPlayer} : Classe abstraite avec stratégies différentes.
-\item \textbf{EasyBot} : Joue aléatoirement, 30\% de chance de passer.
-\item \textbf{MediumBot} : Évite les bombes, joue les combinaisons faibles.
-\item \textbf{HardBot} : Stratégique, privilégie les combinaisons fortes.
-\end{itemize}
+La figure \ref{fig:uml} présente le diagramme de classes UML complet.
 
 \begin{figure}[h!]
 \centering
@@ -46,21 +19,95 @@
 \label{fig:uml}
 \end{figure}
 
-\subsection{IHM Graphique (gui)}
-\paragraph{} L'interface est organisée en trois sous-dossiers :
+\subsection{Patterns de conception utilisés}
+\label{sec:patterns}
+\begin{itemize}
+\item \textbf{Héritage} : BotPlayer → EasyBot, MediumBot, HardBot (hiérarchie à 4 niveaux)
+\item \textbf{Stratégie} : Chaque bot implémente sa propre méthode \texttt{choisirCombinaison()}
+\item \textbf{Factory} : GameBuilder.createBot() selon la difficulté choisie
+\end{itemize}
+
+\newpage
+\section{Mise en œuvre}
+\label{sec:oeuvre}
+
+\subsection{Classes de données (engine.data)}
+\label{sec:data}
+\begin{itemize}
+\item \textbf{Card} : Représente une carte avec sa valeur et sa couleur (énumérations Value et Suit). Les symboles (coeur, pique, carreau, trèfle) permettent un affichage élégant.
+\item \textbf{Deck} : Gère le paquet de 54 cartes (52 standards + 2 Jokers). Méthodes : \texttt{shuffle()}, \texttt{draw()}.
+\item \textbf{Player} : Gère la main du joueur (5 cartes au début). Méthodes : \texttt{drawCard()}, \texttt{playCombination()}, \texttt{canPlay()}.
+\item \textbf{CombinationType} : Énumération des 6 types possibles (SIMPLE, DOUBLE, SERIES, BOMB, DOUBLE\_JOKER, INVALID).
+\item \textbf{GameStats} : Enregistre les statistiques (cartes jouées, bombes, jokers, tours, score).
+\end{itemize}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|l|l|l|}
+\hline
+\textbf{Type} & \textbf{Description} & \textbf{Points} \\
+\hline
+SIMPLE & 1 carte & 1 pt/carte \\
+DOUBLE & 2 cartes identiques & 2 pts \\
+SERIES & 3+ cartes consécutives & 3+ pts \\
+BOMB & 3-4 cartes identiques & ×2 \\
+DOUBLE JOKER & 2 Jokers & ×4 \\
+\hline
+\end{tabular}
+\caption{Types de combinaisons et score associé}
+\label{tab:types}
+\end{table}
+
+\subsection{Traitements (engine.process)}
+\label{sec:process}
+
+\paragraph{Algorithme de détection des combinaisons}
+La méthode \texttt{determineType()} analyse une liste de cartes en plusieurs étapes :
+\begin{enumerate}
+\item Séparer les Jokers des cartes normales
+\item Si seulement des Jokers → DOUBLE\_JOKER (2) ou INVALID (1)
+\item Trier les cartes normales par valeur
+\item Selon le nombre total de cartes et la présence de Jokers, déterminer le type
+\end{enumerate}
+
+\paragraph{Algorithme de comparaison des combinaisons}
+La méthode \texttt{canBeat()} implémente les règles spécifiques :
+\begin{enumerate}
+\item DOUBLE\_JOKER bat tout
+\item BOMBE bat tout sauf DOUBLE\_JOKER
+\item La carte 2 bat toute carte simple
+\item Pour les séries : on compare la première carte
+\item Pour les autres types : comparaison carte à carte
+\end{enumerate}
+
+\subsection{Intelligence artificielle des bots}
+Chaque bot implémente une stratégie différente dans la méthode \texttt{choisirCombinaison()} :
+
+\begin{itemize}
+\item \textbf{EasyBot} : sélection aléatoire parmi les combinaisons jouables, 30\% de chance de passer volontairement.
+\item \textbf{MediumBot} : trie les combinaisons par force et choisit la plus faible (hors bombes), conservant ses cartes fortes.
+\item \textbf{HardBot} : stratégie optimale avec priorités : (1) finir la partie si main courte ($\le$ 3 cartes), (2) ouvrir avec une combinaison forte, (3) jouer le même type que le précédent, (4) jouer une bombe si nécessaire.
+\end{itemize}
+
+\subsection{Interface graphique (gui)}
+L'interface est organisée en trois sous-dossiers :
 
 \begin{itemize}
 \item \textbf{screens/} : Écrans complets (MainGUI, MenuGUI, OptionGUI, EndGameGUI)
 \item \textbf{panels/} : Composants réutilisables (CardPanel, BotsPanel, DeckPanel, GameInfoBar, GameLogPanel)
-\item \textbf{utils/} : Utilitaires (GameStyle, CardPaintStrategy, MusicPlayer)
+\item \textbf{utils/} : Utilitaires (GameStyle, CardPaintStrategy, MusicPlayer, ChartManager)
 \end{itemize}
 
-\subsection{Patterns de conception utilisés}
-\paragraph{}
-\begin{itemize}
-\item \textbf{Héritage} : BotPlayer → EasyBot, MediumBot, HardBot
-\item \textbf{Factory} : GameBuilder.createBot()
-\item \textbf{MVC implicite} : Séparation data/process/gui
-\item \textbf{Stratégie} : Comportements différents des bots
-\item \textbf{Singleton implicite} : GameStyle.isFullscreen
-\end{itemize}
+\paragraph{Gestion du plein écran}
+La variable statique \texttt{GameStyle.isFullscreen} permet de basculer entre mode fenêtré et plein écran. Ce choix persiste entre les écrans grâce à son caractère statique.
+
+\paragraph{Musique de fond}
+La classe \texttt{MusicPlayer} utilise \texttt{javax.sound.sampled} pour jouer un fichier WAV en boucle. La compatibilité Linux reste partielle (problème de codec).
+
+\paragraph{Graphiques statistiques}
+La classe \texttt{ChartManager} utilise jFreeChart pour générer deux graphiques en fin de partie : un camembert (répartition des scores) et un diagramme en barres (cartes jouées, bombes, jokers).
+
+La figure \ref{fig:gameplay} montre l'interface de jeu en action.
+
+\paragraph{Bilan de la mise en œuvre}
+La séparation en trois packages (data, process, gui) a permis un développement parallèle efficace. Les patterns de conception (héritage, stratégie, factory) ont facilité l'ajout de nouvelles fonctionnalités (nouveaux bots, nouvelles combinaisons). Le code total atteint environ 5000 lignes réparties dans plus de 40 classes.

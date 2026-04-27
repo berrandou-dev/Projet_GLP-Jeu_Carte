@@ -3,48 +3,50 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: article.aux
 The style file: plain.bst
 Database file #1: bibliographies.bib
+Warning--to sort, need author or key in jfreechart
+Warning--to sort, need author or key in github
 Warning--to sort, need author or key in javaswing
 Warning--to sort, need author or key in log4j
 Warning--to sort, need author or key in junit
 You've used 5 entries,
             2118 wiz_defined-function locations,
-            523 strings with 4555 characters,
-and the built_in function-call counts, 1136 in all, are:
-= -- 110
-> -- 34
+            513 strings with 4350 characters,
+and the built_in function-call counts, 835 in all, are:
+= -- 80
+> -- 5
 < -- 0
-+ -- 15
-- -- 10
-* -- 66
-:= -- 170
-add.period$ -- 12
++ -- 5
+- -- 0
+* -- 32
+:= -- 99
+add.period$ -- 10
 call.type$ -- 5
-change.case$ -- 20
+change.case$ -- 15
 chr.to.int$ -- 0
-cite$ -- 8
-duplicate$ -- 44
-empty$ -- 119
-format.name$ -- 10
-if$ -- 253
+cite$ -- 10
+duplicate$ -- 35
+empty$ -- 116
+format.name$ -- 0
+if$ -- 206
 int.to.chr$ -- 0
 int.to.str$ -- 5
-missing$ -- 3
-newline$ -- 25
-num.names$ -- 4
-pop$ -- 35
+missing$ -- 0
+newline$ -- 23
+num.names$ -- 0
+pop$ -- 40
 preamble$ -- 1
-purify$ -- 15
+purify$ -- 10
 quote$ -- 0
 skip$ -- 35
 stack$ -- 0
-substring$ -- 50
+substring$ -- 25
 swap$ -- 5
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 18
-warning$ -- 3
-while$ -- 6
+type$ -- 20
+warning$ -- 5
+while$ -- 0
 width$ -- 6
-write$ -- 49
-(There were 3 warnings)
+write$ -- 42
+(There were 5 warnings)

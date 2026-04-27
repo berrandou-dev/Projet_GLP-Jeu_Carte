@@ -19,13 +19,30 @@
 
 %La mise en page du rapport, NE PAS MODIFIER.
 \usepackage{geometry}
- \geometry{
+\geometry{
  a4paper,
  left=20mm,
  right=20mm,
  top=20mm,
  bottom=20mm,
- }
+}
+
+% Footer avec barre
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot[C]{
+    \rule{\textwidth}{0.5pt} \\
+    \small Projet Carte -- CY Cergy Paris Université -- 2025-2026
+}
+\renewcommand{\headrulewidth}{0pt}
+\usepackage{titlesec}
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {\thesection}
+  {1em}
+  {}
+  [\vspace{2mm}\rule{\textwidth}{0.3pt}]
 
 %%%%%%%%% Le corps du document entre begin et end %%%%%%%%%%%%%%%%%%%
 \begin{document}
